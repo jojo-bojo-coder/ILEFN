@@ -153,7 +153,7 @@ def generate_certificate(registration, result):
     draw.text((label_x, 430), participation_text, fill=black, font=font_label)
 
     # Draw score label
-    score_label = "وحصولها على درجة"
+    score_label = "والحصول على درجة"
     label2_bbox = draw.textbbox((0, 0), score_label, font=font_label)
     label2_width = label2_bbox[2] - label2_bbox[0]
     label2_x = (width - label2_width) // 2
