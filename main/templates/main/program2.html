@@ -1,0 +1,610 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}البرنامج الثاني - ILEFN{% endblock %}
+
+{% block content %}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Section */
+        .page-header {
+            background-image: url('{% static 'images/header-banner-1.png' %}');
+            background-size: cover;
+            background-position: center bottom;
+            padding: 60px 0;
+            text-align: center;
+            position: relative;
+            height: 320px;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -200px;
+            width: 400px;
+            height: 600px;
+            background: linear-gradient(135deg, #15637E 0%, transparent 70%);
+            border-radius: 50%;
+            opacity: 0.1;
+        }
+
+        .page-header::after {
+            content: '';
+            position: absolute;
+            bottom: 20px;
+            left: -150px;
+            width: 250px;
+            height: 250px;
+            background: linear-gradient(135deg, #AE863E 0%, transparent 70%);
+            border-radius: 50%;
+            opacity: 0.1;
+        }
+
+        .page-title {
+            color: black;
+            font-size: 46px;
+            font-weight: 700;
+            margin-top: 50px;
+            z-index: 1;
+        }
+
+        /* Two-column layout */
+        .two-column-section {
+            display: flex;
+            flex-direction: row;
+            gap: 40px;
+            padding: 80px 0;
+        }
+
+        .content-column {
+            flex: 3; /* Takes 3/4 of the space */
+        }
+
+        .image-column {
+            flex: 1; /* Takes 1/4 of the space */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Program Content Section */
+        .program-content {
+            background: white;
+        }
+
+        .section-title {
+            color: black;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: right;
+            position: relative;
+            margin-right: 120px;
+        }
+
+        .first-line{
+            color:black;
+        }
+
+        .program-description {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 50px;
+            text-align: right;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .rest-text{
+            font-size: 16px;
+        }
+
+        /* Tabs Section */
+        .tabs-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .tabs-header {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab-button {
+            padding: 15px 30px;
+            background: none;
+            border: none;
+            font-size: 18px;
+            font-weight: 600;
+            color: #777;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tab-button.active {
+            color: #15637E;
+        }
+
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #15637E;
+            border-radius: 2px 2px 0 0;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+            background: #f9f9f9;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* List Styles */
+        .icon-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .icon-list-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .icon-list-icon {
+            margin-left: 15px;
+            color: #15637E;
+            font-size: 20px;
+            min-width: 24px;
+        }
+
+        .icon-list-text {
+            flex: 1;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #444;
+        }
+
+        /* Program Image Section */
+        .program-image-section {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 60px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .program-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            margin-bottom: 30px;
+        }
+
+        .register-button {
+            background: #AE863E;
+            border: 2px solid #AE863E;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .register-button:hover {
+            background: #9d7a42;
+            border-color: #9d7a42;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(174, 134, 62, 0.3);
+        }
+
+        /* Registration Modal */
+        .registration-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .registration-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: row;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #777;
+            transition: color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: #15637E;
+        }
+
+        .modal-platform {
+            margin: 25px 25px;
+        }
+
+        .platform-logo {
+            max-width: 150px;
+        height: 120px;
+            margin-bottom: 15px;
+        }
+
+        .modal-register-button {
+            background: #15637E;
+            border: 2px solid #15637E;
+            color: white;
+            padding: 12px 25px;
+            font-size: 16px;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        .modal-register-button:hover {
+            background: #0B4A5C;
+            border-color: #0B4A5C;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(11, 74, 92, 0.3);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .modal-content {
+                padding: 30px 20px;
+                width: 95%;
+            }
+
+            .modal-platform {
+                margin: 20px 0;
+            }
+
+            .platform-logo {
+                max-width: 100px;
+            }
+
+            .modal-register-button {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .tabs-header {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .tab-button {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+
+            .page-title {
+                font-size: 36px;
+            }
+
+            .section-title {
+                font-size: 26px;
+            }
+
+            .two-column-section {
+                flex-direction: column;
+            }
+
+            .image-column {
+                order: -1; /* Move image to top on mobile */
+                margin-bottom: 30px;
+            }
+        }
+    </style>
+
+    <!-- Header Section -->
+    <section class="page-header" style="background-image: url('{% static 'images/header-banner-1.png' %}');
+                background-size: cover;
+                background-position: center;
+                background-position: center bottom;
+                background-repeat: no-repeat;
+                overflow: hidden;">
+        <div>
+            <h1 class="page-title">البرنامج الثاني: حوّل أفكارك إلى مشروع</h1>
+        </div>
+    </section>
+
+    <!-- Two Column Section -->
+    <section class="two-column-section">
+        <div class="container" style="max-width: 1600px; padding: 0 20px;">
+            <div class="two-column-section">
+                <!-- Right Column: Program Content (3/4 width) -->
+                <div class="content-column">
+                    <!-- Program Content Section -->
+                    <section class="program-content">
+                        <h2 class="section-title">البرنامج الثاني: <span style="color: #15637E;">حوّل أفكارك إلى مشروع</span></h2>
+
+                        <p class="program-description">
+                            <span class="first-line">هل لديك أفكار مبتكرة وتحلم بتحويلها إلى مشروع ناجح؟ انضم إلى برنامج "حوّل أفكارك إلى مشروع" واكتشف كيف تجعل من إبداعك واقعًا ملموسًا!</span>
+                            <span class="rest-text">
+                                <br><br>
+                                هذا البرنامج التدريبي المتخصص سيزودك بالمعرفة والأدوات اللازمة لتحويل أفكارك الإبداعية إلى مشاريع حقيقية. ستتعلم سمات المبدعين وكيفية تنمية القدرات الابتكارية لديك، وما هو الابتكار وما الفرق بينه وبين الإبداع، مما سيمكنك من اكتشاف الطريق الصحيح لتحقيق إبداعك. ستتعرف أيضًا على منهجية إيناس المثبتة لتحويل الفكرة إلى فرصة عمل واستثمارية ناجحة، وما هي حقوق الملكية الفكرية وكيف تحمي أفكارك، مع فهم المتطلبات القانونية.
+                                <br><br>
+                                بالإضافة إلى ذلك، ستتعلم التفكير التصميمي وكيفية استخدامه لتطوير مشروعك، وأهمية براءة الاختراع في حماية ابتكاراتك. كما ستكتشف كيف تبني نموذج أعمال قوي لمشروعك وتستكشف الفرق بينه وبين خطة الأعمال.
+                                <br><br>
+                                هذا البرنامج سيعطيك الأساس المتين لتحويل أفكارك إلى واقع. انضم إلينا واكتشف كيف تحول إبداعك إلى مشروع ناجح!
+                            </span>
+                        </p>
+
+
+                        <!-- Tabs Section -->
+                        <div class="tabs-container">
+                            <div class="tabs-header">
+                                <button class="tab-button active" data-tab="instructors">المحاضرون</button>
+                                <button class="tab-button" data-tab="curriculum">منهج المادة</button>
+                                <button class="tab-button" data-tab="target">الفئة المستهدفة</button>
+                                <button class="tab-button" data-tab="outcomes">المخرجات المتوقعة</button>
+                            </div>
+
+                            <div id="instructors" class="tab-content active">
+                                <p>
+يتم تقديم البرنامج بواسطة نخبة من الخبراء والمستشارين المتميزين في مجال ريادة الأعمال، الذين سيشاركونك خبراتهم ونصائحهم القيمة.</p>
+                            </div>
+
+                            <div id="curriculum" class="tab-content">
+                                <ul class="icon-list">
+                                    <li class="icon-list-item">
+                                        <span class="icon-list-icon">●</span>
+                                        <span class="icon-list-text">سمات المبدعين</span>
+                                    </li>
+                                    <li class="icon-list-item">
+                                        <span class="icon-list-icon">●</span>
+                                        <span class="icon-list-text">ما هو الابتكار؟</span>
+                                    </li>
+                                    <li class="icon-list-item">
+                                        <span class="icon-list-icon">●</span>
+                                        <span class="icon-list-text">ما الفرق بين الابداع والابتكار؟</span>
+                                    </li>
+                                    <li class="icon-list-item">
+                                        <span class="icon-list-icon">●</span>
+                                        <span class="icon-list-text">منهجية إيناس لتحويل الفكرة إلى فرصة</span>
+                                    </li>
+                                    <li class="icon-list-item">
+                                        <span class="icon-list-icon">●</span>
+                                        <span class="icon-list-text">ما هي حقوق الملكية الفكرية؟</span>
+                                    </li>
+                                    <li class="icon-list-item">
+                                        <span class="icon-list-icon">●</span>
+                                        <span class="icon-list-text">التفكير التصميمي</span>
+                                    </li>
+                                    <li class="icon-list-item">
+                                        <span class="icon-list-icon">●</span>
+                                        <span class="icon-list-text">براءة الاختراع</span>
+                                    </li>
+                                    <li class="icon-list-item">
+                                        <span class="icon-list-icon">●</span>
+                                        <span class="icon-list-text">نموذج الأعمال</span>
+                                    </li>
+                                    <li class="icon-list-item">
+                                        <span class="icon-list-icon">●</span>
+                                        <span class="icon-list-text">الفرق بين نموذج الأعمال وخطة الأعمال</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div id="target" class="tab-content">
+                                <ul class="icon-list">
+                                    <li class="icon-list-item">
+                                        <span class="icon-list-icon">●</span>
+                                        <span class="icon-list-text">للشباب الراغب في تنمية العقلية الريادية.</span>
+                                    </li>
+                                    <li class="icon-list-item">
+                                        <span class="icon-list-icon">●</span>
+                                        <span class="icon-list-text">للطامحين في بدء مشاريعهم الريادية.</span>
+                                    </li>
+                                    <li class="icon-list-item">
+                                        <span class="icon-list-icon">●</span>
+                                        <span class="icon-list-text">لأصحاب الأفكار الريادية الذين يرغبون في تحويل أفكارهم إلى مشاريع ناجحة.</span>
+                                    </li>
+                                    <li class="icon-list-item">
+                                        <span class="icon-list-icon">●</span>
+                                        <span class="icon-list-text">لرواد الأعمال الناشئين الذين يسعون لتطوير مشاريعهم وتنميتها.</span>
+                                    </li>
+                                    <li class="icon-list-item">
+                                        <span class="icon-list-icon">●</span>
+                                        <span class="icon-list-text">لأي شخص يطمح لدخول عالم ريادة الأعمال ويرغب في بناء مهارات قوية وشاملة.</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div id="outcomes" class="tab-content">
+                                <ul class="icon-list">
+                                    <li class="icon-list-item">
+                                        <span class="icon-list-icon">●</span>
+                                        <span class="icon-list-text">فهم السمات والقدرات الابتكارية للمبدعين.</span>
+                                    </li>
+                                    <li class="icon-list-item">
+                                        <span class="icon-list-icon">●</span>
+                                        <span class="icon-list-text">تعريف الابتكار وفهم دوره في تطوير الأفكار.</span>
+                                    </li>
+                                    <li class="icon-list-item">
+                                        <span class="icon-list-icon">●</span>
+                                        <span class="icon-list-text">تمييز الفرق بين الإبداع والابتكار وتطبيق كل منهما.</span>
+                                    </li>
+                                    <li class="icon-list-item">
+                                        <span class="icon-list-icon">●</span>
+                                        <span class="icon-list-text">تعلم خطوات تحويل الأفكار إلى فرص عمل ناجحة.</span>
+                                    </li>
+                                    <li class="icon-list-item">
+                                        <span class="icon-list-icon">●</span>
+                                        <span class="icon-list-text">معرفة حقوق الملكية الفكرية وكيفية حماية الأفكار.</span>
+                                    </li>
+                                    <li class="icon-list-item">
+                                        <span class="icon-list-icon">●</span>
+                                        <span class="icon-list-text">اكتساب مهارات التفكير التصميمي لتطوير المشاريع.</span>
+                                    </li>
+                                    <li class="icon-list-item">
+                                        <span class="icon-list-icon">●</span>
+                                        <span class="icon-list-text">فهم براءة الاختراع وأهميتها في حماية الابتكارات.</span>
+                                    </li>
+                                    <li class="icon-list-item">
+                                        <span class="icon-list-icon">●</span>
+                                        <span class="icon-list-text">بناء نموذج أعمال قوي للمشروع.</span>
+                                    </li>
+                                    <li class="icon-list-item">
+                                        <span class="icon-list-icon">●</span>
+                                        <span class="icon-list-text">التمييز بين نموذج الأعمال وخطة الأعمال.</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Left Column: Program Image (1/4 width) -->
+                <div class="image-column">
+                    <!-- Program Image Section -->
+                    <section class="program-image-section">
+                        <img src="{% static 'images/business-idea-1.webp' %}" alt="البرنامج الثاني: حوّل أفكارك إلى مشروع" class="program-image">
+                        <button class="register-button" id="registerButton">سجل الآن</button>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registration Modal -->
+    <div class="registration-modal" id="registrationModal">
+        <div class="modal-content">
+            <span class="modal-close" id="modalClose">&times;</span>
+
+            <div class="modal-platform">
+                                        <img src="{% static 'images/2شعار-ريادمي-الجديد١.webp' %}" alt="رياديمي" class="platform-logo">
+                                        <a href="https://riademy.com/upcoming_courses/entrepreneurshiplicense" target="_blank" class="modal-register-button">
+                                            التسجيل عبر منصة رياديمي
+                                        </a>
+                                    </div>
+
+                                    <div class="modal-platform">
+                                        <img src="{% static 'images/platform-logo.png' %}" alt="رواق" class="platform-logo">
+                                        <a href="https://www.rwaq.org/orgs/ilfen" target="_blank" class="modal-register-button">
+                                            التسجيل عبر منصة رواق
+                                        </a>
+                                    </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons and content
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+                // Add active class to clicked button
+                button.classList.add('active');
+
+                // Show corresponding content
+                const tabId = button.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Modal functionality
+        const registerButton = document.getElementById('registerButton');
+        const modal = document.getElementById('registrationModal');
+        const modalClose = document.getElementById('modalClose');
+
+        registerButton.addEventListener('click', () => {
+            modal.classList.add('active');
+        });
+
+        modalClose.addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+            }
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,198 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التسجيل باختبار الناشئين - ILFEN</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans Arabic', 'Tajawal', sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .registration-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .logo {
+            margin-bottom: 30px;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: #e85a71;
+            margin-bottom: 10px;
+        }
+
+        .logo-subtitle {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .registration-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .registration-subtitle {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #e85a71;
+            box-shadow: 0 0 0 3px rgba(232, 90, 113, 0.1);
+        }
+
+        .submit-btn {
+            background: #e85a71;
+            color: white;
+            padding: 18px 40px;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(232, 90, 113, 0.3);
+            margin-top: 20px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .submit-btn:hover {
+            background: #d64764;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(232, 90, 113, 0.4);
+        }
+
+        .error-message {
+            background: #fee;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+            text-decoration: none;
+            margin-top: 20px;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #e85a71;
+        }
+    </style>
+</head>
+<body>
+    <div class="registration-container">
+        <div class="logo">
+            <div class="logo-text">مقياس ILFEN للناشئين</div>
+            <div class="logo-subtitle">اكتشاف المهارات الريادية</div>
+        </div>
+
+        <h1 class="registration-title">التسجيل بالاختبار</h1>
+        <p class="registration-subtitle">أدخل بياناتك للبدء في اكتشاف مهاراتك الريادية</p>
+
+        {% if error_message %}
+        <div class="error-message">
+            <i class="fas fa-exclamation-circle"></i>
+            {{ error_message }}
+        </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="name" class="form-label">الاسم</label>
+                <input type="text" id="name" name="name" class="form-input" placeholder="اكتب اسمك هنا" required value="{{ form.name.value|default:'' }}">
+                {% if form.name.errors %}
+                <div style="color: #e85a71; font-size: 14px; margin-top: 5px; text-align: right;">
+                    {{ form.name.errors.0 }}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="form-label">البريد الإلكتروني</label>
+                <input type="email" id="email" name="email" class="form-input" placeholder="اكتب بريدك الإلكتروني هنا" required value="{{ form.email.value|default:'' }}">
+                {% if form.email.errors %}
+                <div style="color: #e85a71; font-size: 14px; margin-top: 5px; text-align: right;">
+                    {{ form.email.errors.0 }}
+                </div>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-chevron-left"></i>
+                بدء الاختبار
+            </button>
+        </form>
+
+        <a href="{% url 'junior_ilfen_test' %}" class="back-link">
+            <i class="fas fa-arrow-right"></i>
+            العودة للصفحة الرئيسية
+        </a>
+    </div>
+</body>
+</html>

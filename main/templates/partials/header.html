@@ -1,0 +1,57 @@
+{% load static %}
+<div data-elementor-type="header" data-elementor-id="21087" class="elementor elementor-21087 elementor-location-header">
+    <div class="elementor-section elementor-top-section">
+        <div class="elementor-container">
+            <!-- Logo -->
+            <div class="elementor-column elementor-col-30">
+                <a href="{% url 'home' %}">
+                    <img src="{% static 'images/logo-cropped.png' %}" alt="ILEFN Logo" width="485" height="517">
+                </a>
+            </div>
+
+            <!-- Navigation Menu -->
+            <div class="elementor-column elementor-col-50">
+                <nav class="elementor-nav-menu--main">
+                    <ul class="elementor-nav-menu">
+                        <li class="menu-item current-menu-item">
+                            <a href="{% url 'home' %}" class="elementor-item elementor-item-active">الرئيسية</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="{% url 'home' %}?anchor=licence" class="elementor-item elementor-item-anchor">عن الرخصة</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="{% url 'licence_test' %}" class="elementor-item">اختبار الرخصة</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="{% url 'programs' %}" class="elementor-item">البرامج</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="{% url 'gallery' %}" class="elementor-item">الالبومات</a>
+                        </li>
+                        <li class="menu-item menu-item-has-children">
+                            <a href="#" class="elementor-item elementor-item-anchor">
+                                مقياس السمات
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 5px; transition: transform 0.3s ease;">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </a>
+                            <ul class="sub-menu">
+                                <li class="menu-item">
+                                    <a href="{% url 'ilfen_test' %}" class="elementor-sub-item">اختبار السمات</a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="{% url 'junior_ilfen_test' %}" class="elementor-sub-item">اختبار السمات للناشئين</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <!-- Contact Button -->
+            <div class="elementor-column elementor-col-20">
+                <a class="edublink-button-item" href="#contact">تواصل معنا</a>
+            </div>
+        </div>
+    </div>
+</div>

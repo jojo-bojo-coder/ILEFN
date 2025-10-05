@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>{% block title %}ILEFN - الرخصة الدولية لريادة الأعمال{% endblock %}</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="generator" content="WordPress 6.7.3">
+    <link rel="canonical" href="https://ilfen.com/">
+    <link rel="shortlink" href="https://ilfen.com/">
+
+    <!-- Favicon -->
+    <link rel="icon" href="{% static 'images/cropped-ilefn-fav-icon-32x32.png' %}" sizes="32x32">
+    <link rel="icon" href="{% static 'images/cropped-ilefn-fav-icon-192x192.png' %}" sizes="192x192">
+    <link rel="apple-touch-icon" href="{% static 'images/cropped-ilefn-fav-icon-180x180.png' %}">
+    <meta name="msapplication-TileImage" content="{% static 'images/cropped-ilefn-fav-icon-270x270.png' %}">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{% static 'css/view-source.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ilstyle.css' %}">
+    <link rel="stylesheet" href="{% static 'css/rtl.css' %}">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap">
+
+    <!-- Block for page-specific styles -->
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="rtl {% block body_class %}home page-template-default page page-id-20407{% endblock %}">
+    <!-- Header Section -->
+    <header>
+        {% include 'partials/header.html' %}
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}
+        <!-- Content will be overridden by child templates -->
+        {% endblock %}
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+        {% include 'partials/footer.html' %}
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="{% static 'js/counter-animation.js' %}"></script>
+
+    <!-- Block for page-specific scripts -->
+    {% block extra_js %}{% endblock %}
+    <script>
+    // Function to handle anchor navigation
+    function navigateToAnchor() {
+        // Check if URL has an anchor parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const anchor = urlParams.get('anchor');
+
+        if (anchor) {
+            // Wait for page to fully load
+            window.addEventListener('load', function() {
+                // Find the element with the matching ID
+                const element = document.getElementById(anchor);
+                if (element) {
+                    // Scroll to the element
+                    element.scrollIntoView({ behavior: 'smooth' });
+
+                    // Update URL without the parameter (clean URL)
+                    const cleanUrl = window.location.href.split('?')[0];
+                    window.history.replaceState({}, document.title, cleanUrl);
+                }
+            });
+        }
+    }
+
+    // Run the function when page loads
+    navigateToAnchor();
+    </script>
+</body>
+</html>

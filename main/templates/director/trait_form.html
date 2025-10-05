@@ -1,0 +1,822 @@
+{% extends "director_base.html" %}
+{% load static %}
+
+{% block title %}{{ page_title }} - المدير{% endblock %}
+{% block page_title %}{{ page_title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Enhanced Content Header */
+    .content-header {
+        margin-bottom: 36px;
+        padding-bottom: 24px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+
+    .page-title {
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .page-title::before {
+        content: '⭐';
+        font-size: 36px;
+    }
+
+    .breadcrumb {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        color: #666;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .breadcrumb a {
+        color: var(--primary-color);
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .breadcrumb a:hover {
+        color: var(--accent-color);
+    }
+
+    /* Enhanced Buttons */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: var(--transition);
+        font-family: 'IBM Plex Sans Arabic', sans-serif;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transform: translateX(-100%);
+        transition: transform 0.6s;
+    }
+
+    .btn:hover::before {
+        transform: translateX(100%);
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+        color: white;
+        box-shadow: 0 4px 12px rgba(42, 95, 115, 0.2);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(42, 95, 115, 0.3);
+        color: white;
+    }
+
+    .btn-secondary {
+        background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+        color: white;
+        box-shadow: 0 4px 12px rgba(108, 117, 125, 0.2);
+        margin-top:20px;
+    }
+
+    .btn-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(108, 117, 125, 0.3);
+        color: white;
+    }
+
+    /* Enhanced Form Styles */
+    .form {
+        max-width: 100%;
+    }
+
+    .form-group {
+        margin-bottom: 28px;
+        position: relative;
+        margin-left:20px;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: 600;
+        color: var(--text-dark);
+        font-size: 15px;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .form-label i {
+        color: var(--primary-color);
+        font-size: 16px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 14px 16px;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        font-size: 15px;
+        font-family: 'IBM Plex Sans Arabic', sans-serif;
+        transition: var(--transition);
+        background: white;
+        line-height: 1.5;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(42, 95, 115, 0.1);
+        transform: translateY(-1px);
+    }
+
+    textarea.form-control {
+        min-height: 120px;
+        resize: vertical;
+        line-height: 1.6;
+    }
+
+    /* Enhanced Checkbox Styles */
+    .form-check {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 20px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        border: 2px solid transparent;
+        transition: var(--transition);
+        cursor: pointer;
+        margin-bottom: 16px;
+    }
+
+    .form-check:hover {
+        background: #e9ecef;
+        border-color: #dee2e6;
+    }
+
+    .form-check-input {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #dee2e6;
+        border-radius: 6px;
+        background: white;
+        cursor: pointer;
+        transition: var(--transition);
+        position: relative;
+    }
+
+    .form-check-input:checked {
+        background: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .form-check-input:checked::before {
+        content: '✓';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .form-check-label {
+        font-weight: 500;
+        color: var(--text-dark);
+        cursor: pointer;
+        font-size: 15px;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .form-check-label i {
+        color: var(--success-color);
+    }
+
+    /* Enhanced Error Styling */
+    .text-danger {
+        color: var(--danger-color) !important;
+        font-size: 13px;
+        font-weight: 500;
+        margin-top: 6px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .text-danger::before {
+        content: '⚠';
+        font-size: 14px;
+    }
+
+    .alert-danger {
+        background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+        border: 1px solid #f1b0b7;
+        border-right: 4px solid var(--danger-color);
+        color: #721c24;
+        border-radius: 12px;
+        padding: 16px 20px;
+        margin-bottom: 24px;
+    }
+
+    .alert-info {
+        background: linear-gradient(135deg, #d1ecf1 0%, #c6e9ee 100%);
+        border: 1px solid #b8dde3;
+        border-right: 4px solid var(--primary-color);
+        color: #0c5460;
+        border-radius: 12px;
+        padding: 16px 20px;
+    }
+
+    /* Enhanced Card Styling */
+    .card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        border: 1px solid #f0f0f0;
+        margin-bottom: 32px;
+        overflow: hidden;
+        transition: var(--transition);
+    }
+
+    .card:hover {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .card-header {
+        padding: 24px 28px;
+        border-bottom: 1px solid #f0f0f0;
+        background: linear-gradient(135deg, #fafafa 0%, #f8f9fa 100%);
+    }
+
+    .card-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+
+    .card-body {
+        padding: 32px;
+    }
+
+    /* Tips Card Enhancement */
+    .tips-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .tip-item {
+        padding: 20px;
+        background: linear-gradient(135deg, #f8f9fa 0%, #f1f3f4 100%);
+        border-radius: 12px;
+        border-right: 4px solid;
+        transition: var(--transition);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .tip-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        transform: translateX(-100%);
+        transition: transform 0.6s;
+    }
+
+    .tip-item:hover::before {
+        transform: translateX(100%);
+    }
+
+    .tip-item:hover {
+        transform: translateX(-4px);
+    }
+
+    .tip-item i {
+        font-size: 20px;
+        margin-left: 12px;
+        float: right;
+        margin-top: 4px;
+    }
+
+    .tip-item strong {
+        display: block;
+        color: var(--primary-color);
+        margin-bottom: 8px;
+        font-size: 15px;
+        font-weight: 600;
+    }
+
+    .tip-item p {
+        margin: 0;
+        font-size: 14px;
+        color: #666;
+        line-height: 1.6;
+        clear: both;
+    }
+
+    .tip-item:nth-child(1) { border-color: var(--primary-color); }
+    .tip-item:nth-child(2) { border-color: var(--warning-color); }
+    .tip-item:nth-child(3) { border-color: var(--success-color); }
+    .tip-item:nth-child(4) { border-color: #17a2b8; }
+
+    /* Form Help Text */
+    .form-text {
+        font-size: 13px;
+        color: #6c757d;
+        margin-top: 6px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .form-text::before {
+        content: '💡';
+        font-size: 12px;
+    }
+
+    /* Form Actions */
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-start;
+        padding-top: 24px;
+        border-top: 1px solid #f0f0f0;
+        margin-top: 32px;
+    }
+
+    /* Row Spacing */
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -12px;
+    }
+
+    .col-md-8, .col-md-4 {
+        padding: 0 12px;
+    }
+
+    .col-md-8 {
+        flex: 0 0 66.666667%;
+        max-width: 66.666667%;
+    }
+
+    .col-md-4 {
+        flex: 0 0 33.333333%;
+        max-width: 33.333333%;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .col-md-8, .col-md-4 {
+            flex: 0 0 100%;
+            max-width: 100%;
+            margin-bottom: 24px;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .card-body {
+            padding: 24px 20px;
+        }
+
+        .content-header {
+            margin-bottom: 24px;
+        }
+
+        .page-title {
+            font-size: 24px;
+        }
+    }
+
+    /* Loading State */
+    .btn.loading {
+        opacity: 0.7;
+        pointer-events: none;
+        position: relative;
+        color: transparent;
+    }
+
+    .btn.loading::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 20px;
+        height: 20px;
+        margin: -10px 0 0 -10px;
+        border: 2px solid transparent;
+        border-top: 2px solid currentColor;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Weight Indicator */
+    .weight-indicator {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 8px;
+    }
+
+    .weight-bar {
+        flex: 1;
+        height: 6px;
+        background: #e9ecef;
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .weight-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--success-color), var(--warning-color), var(--danger-color));
+        border-radius: 3px;
+        transition: width 0.3s ease;
+    }
+
+    .weight-value {
+        font-size: 12px;
+        font-weight: 600;
+        color: #666;
+        min-width: 40px;
+        text-align: left;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="page-title">{{ page_title }}</h1>
+            <div class="breadcrumb">
+                <a href="{% url 'director_dashboard' %}">الرئيسية</a>
+                <span>/</span>
+                <a href="{% url 'trait_list' %}">السمات</a>
+                <span>/</span>
+                <span>{{ page_title }}</span>
+            </div>
+        </div>
+        <a href="{% url 'trait_list' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-right"></i>
+            رجوع للقائمة
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">بيانات السمة</h3>
+            </div>
+            <div class="card-body">
+                <form method="post" class="form" id="traitForm">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        {% for error in form.non_field_errors %}
+                        {{ error }}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <div class="form-group">
+                                <label for="{{ form.name.id_for_label }}" class="form-label">
+                                    <i class="fas fa-tag"></i>
+                                    {{ form.name.label }}
+                                </label>
+                                {{ form.name }}
+                                {% if form.name.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.name.errors %}
+                                    {{ error }}
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                                <small class="form-text">اسم السمة باللغة العربية</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="{{ form.name_en.id_for_label }}" class="form-label">
+                                    <i class="fas fa-language"></i>
+                                    {{ form.name_en.label }}
+                                </label>
+                                {{ form.name_en }}
+                                {% if form.name_en.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.name_en.errors %}
+                                    {{ error }}
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                                <small class="form-text">اسم السمة باللغة الإنجليزية (اختياري)</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="{{ form.weight.id_for_label }}" class="form-label">
+                                    <i class="fas fa-weight-hanging"></i>
+                                    {{ form.weight.label }}
+                                </label>
+                                {{ form.weight }}
+                                <div class="weight-indicator">
+                                    <div class="weight-bar">
+                                        <div class="weight-fill" id="weightFill"></div>
+                                    </div>
+                                    <div class="weight-value" id="weightValue">0%</div>
+                                </div>
+                                {% if form.weight.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.weight.errors %}
+                                    {{ error }}
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                                <small class="form-text">القيمة النسبية للسمة (1-100)</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="{{ form.order.id_for_label }}" class="form-label">
+                                    <i class="fas fa-sort-numeric-down"></i>
+                                    {{ form.order.label }}
+                                </label>
+                                {{ form.order }}
+                                {% if form.order.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.order.errors %}
+                                    {{ error }}
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                                <small class="form-text">ترتيب ظهور السمة</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.description.id_for_label }}" class="form-label">
+                            <i class="fas fa-align-left"></i>
+                            {{ form.description.label }}
+                        </label>
+                        {{ form.description }}
+                        <div class="char-counter" id="descCounter">0 حرف</div>
+                        {% if form.description.errors %}
+                        <div class="text-danger">
+                            {% for error in form.description.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <small class="form-text">وصف مفصل للسمة وأهميتها</small>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-check">
+                            {{ form.is_active }}
+                            <label for="{{ form.is_active.id_for_label }}" class="form-check-label">
+                                <i class="fas fa-toggle-on"></i>
+                                {{ form.is_active.label }}
+                            </label>
+                        </div>
+                        <small class="form-text">السمات غير النشطة لن تظهر في الاختبار</small>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary" id="submitBtn">
+                            <i class="fas fa-save"></i>
+                            حفظ السمة
+                        </button>
+                        <a href="{% url 'trait_list' %}" class="btn btn-secondary">
+                            <i class="fas fa-times"></i>
+                            إلغاء
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-lightbulb"></i>
+                    نصائح للسمات
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="tips-list">
+                    <div class="tip-item">
+                        <i class="fas fa-info-circle text-primary"></i>
+                        <strong>الوزن النسبي</strong>
+                        <p>يحدد أهمية السمة في النتيجة النهائية. السمات الأهم يكون وزنها أعلى (1-100).</p>
+                    </div>
+
+                    <div class="tip-item">
+                        <i class="fas fa-sort-numeric-down text-warning"></i>
+                        <strong>الترتيب</strong>
+                        <p>يحدد تسلسل ظهور أسئلة السمة في الاختبار. الترتيب الأقل يظهر أولاً.</p>
+                    </div>
+
+                    <div class="tip-item">
+                        <i class="fas fa-toggle-on text-success"></i>
+                        <strong>الحالة النشطة</strong>
+                        <p>السمات غير النشطة لن تظهر في الاختبارات الجديدة ولكن تبقى في النظام.</p>
+                    </div>
+
+                    <div class="tip-item">
+                        <i class="fas fa-language text-info"></i>
+                        <strong>الاسم الإنجليزي</strong>
+                        <p>مفيد للتطوير والتقارير الفنية والتحليلات المتقدمة.</p>
+                    </div>
+                </div>
+
+                {% if trait and trait.question_count > 0 %}
+                <div class="alert alert-info mt-4">
+                    <h6><i class="fas fa-question-circle"></i> معلومات السمة</h6>
+                    <p class="mb-0">هذه السمة مرتبطة بـ <strong>{{ trait.question_count }}</strong> سؤال في النظام.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Enhance form inputs with classes
+        const inputs = document.querySelectorAll('input, select, textarea');
+        inputs.forEach(input => {
+            if (input.type !== 'checkbox') {
+                input.classList.add('form-control');
+            }
+        });
+
+        // Weight indicator
+        const weightInput = document.getElementById('{{ form.weight.id_for_label }}');
+        const weightFill = document.getElementById('weightFill');
+        const weightValue = document.getElementById('weightValue');
+
+        function updateWeightIndicator() {
+            if (weightInput && weightFill && weightValue) {
+                const value = parseInt(weightInput.value) || 0;
+                const percentage = Math.min(100, Math.max(0, value));
+                weightFill.style.width = percentage + '%';
+                weightValue.textContent = percentage + '%';
+
+                // Color coding
+                if (percentage < 33) {
+                    weightFill.style.background = 'linear-gradient(90deg, var(--success-color), #28a745)';
+                } else if (percentage < 66) {
+                    weightFill.style.background = 'linear-gradient(90deg, var(--warning-color), #ffc107)';
+                } else {
+                    weightFill.style.background = 'linear-gradient(90deg, var(--danger-color), #dc3545)';
+                }
+            }
+        }
+
+        if (weightInput) {
+            weightInput.addEventListener('input', updateWeightIndicator);
+            weightInput.addEventListener('change', function() {
+                const value = parseInt(this.value);
+                if (value < 1 || value > 100) {
+                    this.setCustomValidity('يجب أن يكون الوزن بين 1 و 100');
+                } else {
+                    this.setCustomValidity('');
+                }
+            });
+            updateWeightIndicator(); // Initial update
+        }
+
+        // Character counter for description field
+        const descField = document.getElementById('{{ form.description.id_for_label }}');
+        const descCounter = document.getElementById('descCounter');
+
+        if (descField && descCounter) {
+            function updateDescCounter() {
+                const length = descField.value.length;
+                descCounter.textContent = length + ' حرف';
+
+                if (length > 200) {
+                    descCounter.classList.add('warning');
+                    descCounter.style.color = 'var(--warning-color)';
+                } else {
+                    descCounter.classList.remove('warning');
+                    descCounter.style.color = '#6c757d';
+                }
+
+                if (length > 500) {
+                    descCounter.classList.add('danger');
+                    descCounter.style.color = 'var(--danger-color)';
+                } else {
+                    descCounter.classList.remove('danger');
+                }
+            }
+
+            descField.addEventListener('input', updateDescCounter);
+            updateDescCounter(); // Initial count
+        }
+
+        // Form submission loading state
+        const form = document.getElementById('traitForm');
+        const submitBtn = document.getElementById('submitBtn');
+
+        if (form && submitBtn) {
+            form.addEventListener('submit', function() {
+                submitBtn.classList.add('loading');
+                submitBtn.disabled = true;
+            });
+        }
+
+        // Auto-focus first field with error or first field
+        const firstErrorField = document.querySelector('.text-danger');
+        if (firstErrorField) {
+            const fieldWithError = firstErrorField.closest('.form-group').querySelector('input, select, textarea');
+            if (fieldWithError) {
+                fieldWithError.focus();
+            }
+        } else {
+            const firstField = document.querySelector('input, select, textarea');
+            if (firstField && firstField.type !== 'hidden') {
+                firstField.focus();
+            }
+        }
+
+        // Enhanced checkbox styling
+        const checkboxes = document.querySelectorAll('.form-check-input');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    this.parentElement.style.background = 'rgba(42, 95, 115, 0.05)';
+                    this.parentElement.style.borderColor = 'var(--primary-color)';
+                } else {
+                    this.parentElement.style.background = '#f8f9fa';
+                    this.parentElement.style.borderColor = 'transparent';
+                }
+            });
+
+            // Trigger initial state
+            checkbox.dispatchEvent(new Event('change'));
+        });
+    });
+</script>
+{% endblock %}

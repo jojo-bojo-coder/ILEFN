@@ -1,0 +1,39 @@
+/* View Source Styles */
+.doctype {
+    color: #6a737d;
+}
+
+.start-tag {
+    color: #22863a;
+}
+
+.end-tag {
+    color: #22863a;
+}
+
+.attribute-name {
+    color: #6f42c1;
+}
+
+.attribute-value {
+    color: #032f62;
+}
+
+.entity {
+    color: #d73a49;
+}
+
+.comment {
+    color: #6a737d;
+    font-style: italic;
+}
+
+#viewsource {
+    font-family: 'IBM Plex Sans Arabic';
+    white-space: pre;
+    line-height: 1.5;
+}
+
+#line1, #line2, #line3, #line4, #line5 {
+    display: block;
+}

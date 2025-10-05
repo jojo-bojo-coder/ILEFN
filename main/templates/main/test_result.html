@@ -1,0 +1,564 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block body_class %}result-page page-template-default page wp-embed-responsive edublink-page-content theme-name-edublink{% endblock %}
+
+{% block content %}
+<style>
+    /* Result Page Styles */
+    .result-page {
+        background: linear-gradient(135deg, #e8eef5 0%, #f5f7fa 100%);
+        min-height: 100vh;
+        padding: 40px 20px 80px;
+    }
+
+    .result-container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    /* Header Section */
+    .result-header {
+
+        padding: 40px;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .result-title {
+        font-size: 36px;
+        font-weight: 700;
+        color: #2A5F73;
+        margin-bottom: 10px;
+    }
+
+    .result-subtitle {
+        font-size: 18px;
+        color: #718096;
+        text-decoration: underline;
+        text-decoration-color: #f4a340;
+        text-decoration-thickness: 3px;
+        text-underline-offset: 8px;
+    }
+
+    /* Main Content Grid */
+    .result-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-bottom: 30px;
+    }
+
+    /* Score Cards */
+    .score-card {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        text-align: center;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    .score-label {
+        font-size: 20px;
+        color: #718096;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+    .score-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #e8eef5 0%, #d4dfe9 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    color: #2A5F73;
+    flex-shrink: 0; /* Prevents icon from shrinking */
+}
+
+.time-unit {
+    font-size: 0.6em;
+    font-weight: 500;
+    margin-right: 2px;
+    color: #718096;
+}
+
+.score-value {
+    font-size: 72px;
+    font-weight: 700;
+    color: #2A5F73;
+    margin: 0;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 5px;
+}
+
+    /* Certificate Section */
+    .certificate-section {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    }
+
+
+
+
+    .cert-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .cert-logo {
+        max-width: 120px;
+        margin-bottom: 15px;
+    }
+
+    .cert-title {
+        font-size: 16px;
+        color: #2A5F73;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    .cert-subtitle {
+        font-size: 14px;
+        color: #718096;
+    }
+
+    .cert-congratulations {
+        text-align: center;
+        font-size: 18px;
+        color: #4a5568;
+        margin-bottom: 20px;
+    }
+
+    .cert-name {
+        text-align: center;
+        font-size: 42px;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 20px;
+    }
+
+    .cert-achievement {
+        text-align: center;
+        font-size: 16px;
+        color: #4a5568;
+        margin-bottom: 10px;
+    }
+
+    .cert-score {
+        text-align: center;
+        font-size: 48px;
+        font-weight: 700;
+        color: #f4a340;
+        margin-bottom: 20px;
+    }
+
+    .cert-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 2px solid #e2e8f0;
+    }
+
+    .cert-date, .cert-signature {
+        font-size: 14px;
+        color: #718096;
+    }
+
+    .cert-seal {
+        position: absolute;
+        top: 50%;
+        left: 50px;
+        transform: translateY(-50%);
+        width: 100px;
+        height: 100px;
+        background: #f4a340;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 15px rgba(244, 163, 64, 0.3);
+    }
+
+    .cert-seal-icon {
+        font-size: 50px;
+        color: white;
+    }
+
+    .download-btn {
+        background: linear-gradient(135deg, #2A5F73 0%, #1E4A5C 100%);
+        color: white;
+        padding: 18px 40px;
+        font-size: 18px;
+        font-weight: 600;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin: 20px auto;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 25px rgba(42, 95, 115, 0.3);
+    }
+
+    .download-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 35px rgba(42, 95, 115, 0.4);
+    }
+
+    /* Analysis Section */
+    .analysis-section {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    .analysis-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #2A5F73;
+        margin-bottom: 10px;
+        text-align: center;
+
+    }
+
+    .chart-container {
+        max-width: 600px;
+        margin: 40px auto;
+        position: relative;
+    }
+
+    /* Traits Description */
+    .traits-description {
+        background: #f8fafc;
+        border-radius: 15px;
+        padding: 30px;
+        line-height: 1.8;
+        color: #4a5568;
+        font-size: 17px;
+        text-align: right;
+    }
+
+    .traits-description p {
+        margin-bottom: 15px;
+    }
+
+    .traits-description ul {
+        list-style: none;
+        padding-right: 0;
+    }
+
+    .traits-description li {
+        margin-bottom: 12px;
+        padding-right: 30px;
+        position: relative;
+    }
+
+    .traits-description li::before {
+        content: '•';
+        position: absolute;
+        right: 10px;
+        color: #2A5F73;
+        font-weight: 700;
+        font-size: 20px;
+    }
+
+    /* Recommendations */
+    .recommendations-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #2A5F73;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .recommendations-list {
+        display: grid;
+        gap: 15px;
+    }
+
+    .recommendation-item {
+        background: #f8fafc;
+        border-right: 4px solid #2A5F73;
+        padding: 20px 25px;
+        border-radius: 10px;
+        font-size: 16px;
+        color: #4a5568;
+        line-height: 1.6;
+    }
+
+    .recommendation-number {
+        font-weight: 700;
+        color: #2A5F73;
+        margin-left: 8px;
+    }
+
+    /* Retry Button */
+    .retry-section {
+        background: linear-gradient(135deg, #f4a340 0%, #d88a2a 100%);
+        border-radius: 20px;
+        padding: 40px;
+        text-align: center;
+        box-shadow: 0 10px 40px rgba(244, 163, 64, 0.3);
+    }
+
+    .retry-btn {
+        background: white;
+        color: #f4a340;
+        padding: 18px 40px;
+        font-size: 18px;
+        font-weight: 700;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .retry-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Responsive */
+    @media (max-width: 968px) {
+        .result-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .cert-seal {
+            position: static;
+            transform: none;
+            margin: 0 auto 20px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .result-title {
+            font-size: 28px;
+        }
+
+        .score-value {
+            font-size: 56px;
+        }
+
+        .cert-name {
+            font-size: 32px;
+        }
+
+        .cert-score {
+            font-size: 36px;
+        }
+
+        .certificate-preview {
+            padding: 25px;
+        }
+    }
+    .score-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px 0;
+}
+</style>
+
+<section class="result-page">
+    <div class="result-container">
+        <!-- Header -->
+        <div class="result-header">
+            <h1 class="result-title">نتيجة المقياس</h1>
+        </div>
+
+        <!-- Score Grid -->
+        <div class="result-grid">
+            <!-- Total Score -->
+            <div class="score-card">
+                <h3 class="score-label">الدرجة</h3>
+
+                <div class="score-row">
+                    <div class="score-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="score-value">{{ result.total_score|floatformat:0 }}%</div>
+                </div>
+            </div>
+
+                        <!-- Time Taken -->
+            <div class="score-card">
+                <h3 class="score-label">الوقت المستغرق</h3>
+                <div class="score-row">
+                    <div class="score-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="score-value">
+                        {{ time_taken_minutes }}<span class="time-unit">د</span>
+                        {{ time_taken_seconds }}<span class="time-unit">ث</span>
+                    </div>
+                </div>
+            </div>
+
+</div>
+        </div>
+
+        <!-- Certificate Section -->
+        <div class="certificate-section">
+            <h2 class="analysis-title">شهادة الرخصة الدولية لريادة الأعمال</h2>
+
+            {% if result.certificate_path %}
+                <div class="certificate-preview" style="padding: 0; border: none;">
+                    <img src="{% get_media_prefix %}{{ result.certificate_path }}"
+                         alt="Certificate"
+                         style="width: 100%; max-width: 800px; margin: 0 auto; display: block; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.15);">
+                </div>
+                {% else %}
+                <p style="text-align: center; color: #718096;">لم يتم إنشاء الشهادة بعد</p>
+                {% endif %}
+
+            <a href="{% url 'download_certificate' %}" class="download-btn">
+                <i class="fas fa-download"></i>
+                تحميل الشهادة
+            </a>
+        </div>
+
+        <!-- Analysis Section -->
+        <div class="analysis-section">
+            <h2 class="analysis-title">التحليل التفصيلي للسمات</h2>
+
+            <div class="chart-container">
+                <!-- Chart will be inserted here via JavaScript -->
+                <canvas id="traitChart" width="600" height="400"></canvas>
+            </div>
+
+            <div class="traits-description">
+                <p><strong>ملاحظات حول النتائج:</strong></p>
+                <p>بناءً على أدائك في الاختبار، إليك تحليل لسماتك الريادية:</p>
+                <ul>
+                    {% for trait_name, score_data in trait_scores.items %}
+                    <li>
+                        <strong>{{ trait_name }}:</strong>
+                        {{ score_data.percentage|floatformat:0 }}% -
+                        {% if score_data.percentage >= 80 %}
+                        مستوى ممتاز
+                        {% elif score_data.percentage >= 60 %}
+                        مستوى جيد جداً
+                        {% elif score_data.percentage >= 40 %}
+                        مستوى جيد
+                        {% else %}
+                        يحتاج إلى تطوير
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Recommendations Section -->
+        <div class="analysis-section">
+            <h2 class="recommendations-title">التوصيات والتطوير</h2>
+
+            <div class="recommendations-list">
+                <div class="recommendation-item">
+                    <span class="recommendation-number">1.</span>
+                    التركيز على تطوير مهارات القيادة واتخاذ القرارات
+                </div>
+                <div class="recommendation-item">
+                    <span class="recommendation-number">2.</span>
+                    المشاركة في ورش عمل التخطيط الاستراتيجي
+                </div>
+                <div class="recommendation-item">
+                    <span class="recommendation-number">3.</span>
+                    قراءة كتب ومقالات عن إدارة المخاطر
+                </div>
+                <div class="recommendation-item">
+                    <span class="recommendation-number">4.</span>
+                    التدرب على مهارات التواصل الفعال
+                </div>
+                <div class="recommendation-item">
+                    <span class="recommendation-number">5.</span>
+                    متابعة دورات في الابتكار والإبداع
+                </div>
+            </div>
+        </div>
+
+        <!-- Retry Section -->
+        <div class="retry-section">
+            <h2 style="color: white; margin-bottom: 20px;">هل ترغب في تحسين نتيجتك؟</h2>
+            <p style="color: white; margin-bottom: 30px; font-size: 18px;">يمكنك إعادة الاختبار بعد 30 يوم للاطلاع على تطور مهاراتك</p>
+            <button class="retry-btn" onclick="window.location.href='{% url 'home' %}'">
+                <i class="fas fa-home"></i>
+                العودة للرئيسية
+            </button>
+        </div>
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const traitScores = {
+        {% for trait_name, score_data in trait_scores.items %}
+            '{{ trait_name }}': {{ score_data.percentage }},
+        {% endfor %}
+    };
+
+    const ctx = document.getElementById('traitChart').getContext('2d');
+    const traitChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: Object.keys(traitScores),
+            datasets: [{
+                label: 'درجات السمات',
+                data: Object.values(traitScores),
+                backgroundColor: 'rgba(42, 95, 115, 0.2)',
+                borderColor: '#2A5F73',
+                borderWidth: 2,
+                pointBackgroundColor: '#2A5F73',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: '#2A5F73'
+            }]
+        },
+        options: {
+            scales: {
+                r: {
+                    angleLines: {
+                        display: true
+                    },
+                    suggestedMin: 0,
+                    suggestedMax: 100,
+                    ticks: {
+                        stepSize: 20
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+});
+</script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+{% endblock %}

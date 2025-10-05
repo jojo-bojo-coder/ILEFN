@@ -1,0 +1,500 @@
+{% extends "director_base.html" %}
+{% load static %}
+
+{% block title %}{{ page_title }} - المدير{% endblock %}
+{% block page_title %}{{ page_title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Enhanced Content Header */
+    .content-header {
+        margin-bottom: 36px;
+        padding-bottom: 24px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+
+    .page-title {
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .page-title::before {
+        content: '🧒';
+        font-size: 36px;
+    }
+
+    .breadcrumb {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        color: #666;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .breadcrumb a {
+        color: var(--primary-color);
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .breadcrumb a:hover {
+        color: var(--accent-color);
+    }
+
+    /* Enhanced Header Actions */
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #218c74 0%, #1a7560 100%);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: var(--transition);
+        box-shadow: 0 4px 12px rgba(33, 140, 116, 0.2);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(33, 140, 116, 0.3);
+        color: white;
+    }
+
+    .btn-secondary {
+        background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: var(--transition);
+        box-shadow: 0 4px 12px rgba(108, 117, 125, 0.2);
+        margin-top:20px;
+    }
+
+    .btn-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(108, 117, 125, 0.3);
+        color: white;
+    }
+
+    /* Enhanced Card */
+    .card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        border: 1px solid #f0f0f0;
+        margin-bottom: 32px;
+        overflow: hidden;
+        transition: var(--transition);
+    }
+
+    .card:hover {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .card-header {
+        padding: 24px 28px;
+        border-bottom: 1px solid #f0f0f0;
+        background: linear-gradient(135deg, #f0f8f5 0%, #e8f4f0 100%);
+    }
+
+    .card-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #218c74;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .card-body {
+        padding: 28px;
+    }
+
+    /* Enhanced Form */
+    .form-group {
+        margin-bottom: 24px;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #218c74;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .form-control, .form-select {
+        display: block;
+        width: 100%;
+        padding: 12px 16px;
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 1.5;
+        color: #333;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #e9ecef;
+        border-radius: 10px;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    .form-control:focus, .form-select:focus {
+        color: #333;
+        background-color: #fff;
+        border-color: #218c74;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(33, 140, 116, 0.25);
+    }
+
+    textarea.form-control {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    /* Enhanced Checkbox */
+    .form-check {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0;
+        margin-bottom: 0;
+    }
+
+    .form-check-input {
+        width: 20px;
+        height: 20px;
+        margin: 0;
+        border-radius: 6px;
+        border: 2px solid #e9ecef;
+        position: relative;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .form-check-input:checked {
+        background-color: #218c74;
+        border-color: #218c74;
+    }
+
+    .form-check-label {
+        font-weight: 500;
+        color: #333;
+        cursor: pointer;
+        margin: 0;
+    }
+
+    /* Form Actions */
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-start;
+        margin-top: 32px;
+        padding-top: 24px;
+        border-top: 1px solid #f0f0f0;
+    }
+
+    /* Alert Styling */
+    .alert {
+        padding: 16px 20px;
+        border-radius: 10px;
+        margin-bottom: 24px;
+        border: 1px solid transparent;
+    }
+
+    .alert-danger {
+        color: #721c24;
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+    }
+
+    .text-danger {
+        color: #dc3545 !important;
+        font-size: 13px;
+        margin-top: 6px;
+        display: block;
+    }
+
+    /* Junior Specific Styling */
+    .junior-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+        color: #856404;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-right: 10px;
+        border: 1px solid #ffeaa7;
+    }
+
+    .junior-indicator::before {
+        content: '🧒';
+        font-size: 10px;
+    }
+
+    /* Weight and Order Badges Preview */
+    .preview-badges {
+        display: flex;
+        gap: 12px;
+        margin-top: 8px;
+    }
+
+    .weight-badge {
+        background: linear-gradient(135deg, #218c74 0%, #1a7560 100%);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        box-shadow: 0 2px 4px rgba(33, 140, 116, 0.2);
+    }
+
+    .order-badge {
+        background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 12px;
+        min-width: 40px;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(108, 117, 125, 0.2);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .card-body {
+            padding: 20px;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .btn-primary, .btn-secondary {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .preview-badges {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="page-title">
+                <span class="junior-indicator">ناشئين</span>
+                {{ page_title }}
+            </h1>
+            <div class="breadcrumb">
+                <a href="{% url 'director_dashboard' %}">الرئيسية</a>
+                <span>/</span>
+                <a href="{% url 'junior_trait_list' %}">سمات الناشئين</a>
+                <span>/</span>
+                <span>{{ page_title }}</span>
+            </div>
+        </div>
+        <a href="{% url 'junior_trait_list' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-right"></i>
+            رجوع للقائمة
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="fas fa-edit"></i>
+            بيانات السمة
+        </h3>
+    </div>
+    <div class="card-body">
+        <form method="post" class="form">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in form.non_field_errors %}
+                {{ error }}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="{{ form.name.id_for_label }}" class="form-label">{{ form.name.label }}</label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                        <div class="text-danger">
+                            {% for error in form.name.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="{{ form.name_en.id_for_label }}" class="form-label">{{ form.name_en.label }}</label>
+                        {{ form.name_en }}
+                        {% if form.name_en.errors %}
+                        <div class="text-danger">
+                            {% for error in form.name_en.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="{{ form.weight.id_for_label }}" class="form-label">{{ form.weight.label }}</label>
+                        {{ form.weight }}
+                        {% if form.weight.errors %}
+                        <div class="text-danger">
+                            {% for error in form.weight.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="preview-badges">
+                            <span class="weight-badge">
+                                <i class="fas fa-weight-hanging"></i>
+                                الوزن: <span id="weight-preview">{% if form.weight.value %}{{ form.weight.value }}{% else %}0{% endif %}</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="{{ form.order.id_for_label }}" class="form-label">{{ form.order.label }}</label>
+                        {{ form.order }}
+                        {% if form.order.errors %}
+                        <div class="text-danger">
+                            {% for error in form.order.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="preview-badges">
+                            <span class="order-badge">
+                                <i class="fas fa-sort-numeric-down"></i>
+                                الترتيب: <span id="order-preview">{% if form.order.value %}{{ form.order.value }}{% else %}0{% endif %}</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.description.id_for_label }}" class="form-label">{{ form.description.label }}</label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                <div class="text-danger">
+                    {% for error in form.description.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <div class="form-check">
+                    {{ form.is_active }}
+                    <label for="{{ form.is_active.id_for_label }}" class="form-check-label">
+                        {{ form.is_active.label }}
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i>
+                    حفظ السمة
+                </button>
+                <a href="{% url 'junior_trait_list' %}" class="btn btn-secondary">
+                    <i class="fas fa-times"></i>
+                    إلغاء
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Update weight preview
+        const weightInput = document.getElementById('{{ form.weight.id_for_label }}');
+        const weightPreview = document.getElementById('weight-preview');
+
+        if (weightInput && weightPreview) {
+            weightInput.addEventListener('input', function() {
+                weightPreview.textContent = this.value || '0';
+            });
+        }
+
+        // Update order preview
+        const orderInput = document.getElementById('{{ form.order.id_for_label }}');
+        const orderPreview = document.getElementById('order-preview');
+
+        if (orderInput && orderPreview) {
+            orderInput.addEventListener('input', function() {
+                orderPreview.textContent = this.value || '0';
+            });
+        }
+
+        // Add visual feedback for form inputs
+        const formInputs = document.querySelectorAll('.form-control, .form-select');
+        formInputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+
+            input.addEventListener('blur', function() {
+                this.parentElement.classList.remove('focused');
+            });
+        });
+    });
+</script>
+{% endblock %}

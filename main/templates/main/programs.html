@@ -1,0 +1,587 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}البرامج - ILEFN{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Header Section */
+    .page-header {
+        background: linear-gradient(135deg, rgba(11, 74, 92, 0.9) 0%, rgba(21, 99, 126, 0.9) 100%);
+        padding: 60px 0;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        height: 320px;
+    }
+
+    .page-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: -200px;
+        width: 400px;
+        height: 600px;
+        background: linear-gradient(135deg, #15637E 0%, transparent 70%);
+        border-radius: 50%;
+        opacity: 0.1;
+    }
+
+    .page-header::after {
+        content: '';
+        position: absolute;
+        bottom: 20px;
+        left: -150px;
+        width: 250px;
+        height: 250px;
+        background: linear-gradient(135deg, #AE863E 0%, transparent 70%);
+        border-radius: 50%;
+        opacity: 0.1;
+    }
+
+    .page-title {
+        color: black;
+        font-size: 46px;
+        font-weight: 700;
+        margin-top: 50px;
+        z-index: 1;
+        position: relative;
+    }
+
+    /* Programs Section */
+    .programs-section {
+        background: white;
+        padding: 80px 0;
+    }
+
+    .programs-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .programs-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+        margin-top: 60px;
+    }
+
+    .program-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        position: relative;
+        text-decoration: none;
+        display: block;
+        color: inherit;
+        /* Initial state for animation - scale from center */
+        opacity: 0;
+        transform: scale(0.3);
+        transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease;
+    }
+
+    .program-card.animate-in {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    .program-card:hover {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .program-image-container {
+        position: relative;
+        overflow: hidden;
+        height: 250px;
+    }
+
+    .program-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .program-card:hover .program-image {
+        transform: scale(1.05);
+    }
+
+    .program-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(184, 147, 78, 0.1);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .program-card:hover .program-overlay {
+        opacity: 1;
+    }
+
+    .program-content {
+        padding: 25px;
+        position: relative;
+        transition: background-color 0.3s ease;
+    }
+
+    .program-card:hover .program-content {
+        background-color: rgba(184, 147, 78, 0.05);
+    }
+
+    .program-title {
+        color: #15637E;
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        text-align:center;
+        transition: color 0.3s ease;
+    }
+
+    .program-card:hover .program-title {
+        color: #B8934E;
+    }
+
+    .program-description {
+        color: #555;
+        line-height: 1.6;
+        font-size: 16px;
+        text-align:center;
+    }
+
+    .program-cta {
+        color: #B8934E;
+        font-weight: 600;
+        margin-top: 15px;
+        display: flex;
+        align-items: center;
+        opacity: 0;
+        transform: translateX(-10px);
+        transition: all 0.3s ease;
+    }
+
+    .program-card:hover .program-cta {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .program-cta::before {
+        content: "→";
+        margin-left: 5px;
+    }
+
+    /* Testimonial Section */
+    .testimonial-section {
+        background: #f8fafc;
+        padding: 80px 0;
+        text-align: center;
+    }
+
+    .testimonial-title {
+        color: black;
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 40px;
+        text-align: center;
+        position: relative;
+    }
+
+    .testimonial-video {
+        max-width: 800px;
+        margin: 0 auto;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Test Portal Section */
+    .test-portal-section {
+    background: white;
+    padding: 80px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.test-container {
+    background: linear-gradient(135deg, #2A5F73 0%, #1E4A5C 100%);
+    border-radius: 25px;
+    padding: 0;
+    max-width: 1100px;
+    width: 90%;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    position: relative;
+    min-height: 300px;
+}
+
+/* Left side - Button area */
+.test-button-side {
+    flex: 0 0 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+.test-button {
+    background: white;
+    color: #2A5F73;
+    padding: 16px 40px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: none;
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.test-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(42, 95, 115, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.test-button:hover::before {
+    left: 100%;
+}
+
+.test-button:hover {
+    background: #f0f8ff;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(255, 255, 255, 0.3);
+}
+
+.test-button i {
+    font-size: 18px;
+}
+
+/* Right side - Content area */
+.test-content {
+    flex: 1;
+    padding: 40px 60px 40px 20px;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+}
+
+.test-portal-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+.test-portal-description {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 0;
+    line-height: 1.6;
+}
+
+/* Add decorative squares like the photo */
+.test-container::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    z-index: 1;
+}
+
+.test-container::after {
+    content: '';
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    z-index: 1;
+}
+
+/* Additional decorative elements */
+.test-container {
+    background:
+        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 50%),
+        linear-gradient(135deg, #2A5F73 0%, #1E4A5C 100%);
+}
+
+/* Responsive Design for Test Portal */
+@media (max-width: 768px) {
+    .test-portal-section {
+        padding: 60px 0;
+    }
+
+    .test-container {
+        width: 95%;
+        border-radius: 20px;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .test-button-side {
+        flex: none;
+        order: 2;
+        padding: 20px;
+    }
+
+    .test-content {
+        flex: none;
+        order: 1;
+        padding: 30px;
+        text-align: center;
+    }
+
+    .test-portal-title {
+        font-size: 24px;
+    }
+
+    .test-portal-description {
+        font-size: 14px;
+        margin-bottom: 0;
+    }
+
+    .test-button {
+        padding: 14px 30px;
+        font-size: 15px;
+    }
+}
+
+    .video-card-section {
+            padding: 40px 0;
+        }
+
+        .video-card-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .video-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            grid-column: span 2;
+            margin-top: 40px;
+            /* Animation properties */
+            opacity: 0;
+            transform: scale(0.3);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .video-card.animate-in {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .video-card-header {
+            padding: 25px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .video-card-title {
+            color: #15637E;
+            font-size: 28px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .video-card-content {
+            padding: 0;
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+</style>
+{% endblock %}
+
+{% block content %}
+    <!-- Header Section -->
+    <section class="page-header" style="background-image: url('{% static 'images/header-banner-1.png' %}');
+                background-size: cover;
+                background-position: center;
+                background-position: center bottom;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                overflow: hidden;">
+        <div class="programs-container">
+            <h1 class="page-title">البرامج</h1>
+        </div>
+    </section>
+
+    <!-- Programs Section -->
+    <section class="programs-section">
+        <div class="programs-container">
+            <div class="programs-grid">
+                <!-- Program 1 -->
+                <a href="{% url 'program1' %}" class="program-card">
+                    <div class="program-image-container">
+                        <img src="{% static 'images/program-1-1.webp' %}" alt="البرنامج الأول" class="program-image">
+                        <div class="program-overlay"></div>
+                    </div>
+                    <div class="program-content">
+                        <h3 class="program-title">البرنامج الأول</h3>
+                        <p class="program-description">اكتشف رياديتك</p>
+                        <span class="program-cta">اكتشف المزيد</span>
+                    </div>
+                </a>
+
+                <!-- Program 2 -->
+                <a href="{% url 'program2' %}" class="program-card">
+                    <div class="program-image-container">
+                        <img src="{% static 'images/business-idea-1.webp' %}" alt="البرنامج الثاني" class="program-image">
+                        <div class="program-overlay"></div>
+                    </div>
+                    <div class="program-content">
+                        <h3 class="program-title">البرنامج الثاني</h3>
+                        <p class="program-description">حوّل أفكارك إلى مشروع</p>
+                        <span class="program-cta">اكتشف المزيد</span>
+                    </div>
+                </a>
+
+                <!-- Program 3 -->
+                <a href="{% url 'program3' %}" class="program-card">
+                    <div class="program-image-container">
+                        <img src="{% static 'images/program-2-1.webp' %}" alt="البرنامج الثالث" class="program-image">
+                        <div class="program-overlay"></div>
+                    </div>
+                    <div class="program-content">
+                        <h3 class="program-title">البرنامج الثالث</h3>
+                        <p class="program-description">خطط لمشروعك</p>
+                        <span class="program-cta">اكتشف المزيد</span>
+                    </div>
+                </a>
+
+                <!-- Program 4 -->
+                <a href="{% url 'program4' %}" class="program-card">
+                    <div class="program-image-container">
+                        <img src="{% static 'images/program-4-1.webp' %}" alt="البرنامج الرابع" class="program-image">
+                        <div class="program-overlay"></div>
+                    </div>
+                    <div class="program-content">
+                        <h3 class="program-title">البرنامج الرابع</h3>
+                        <p class="program-description">نفذ مشروعك</p>
+                        <span class="program-cta">اكتشف المزيد</span>
+                    </div>
+                </a>
+
+                 <!-- Video Card - Fixed to span two columns -->
+                <div class="video-card">
+                    <div class="video-card-header">
+                        <h2 class="video-card-title">استمع للمتدربين</h2>
+                    </div>
+                    <div class="video-card-content">
+                        <div class="video-wrapper">
+                            <iframe
+                                src="https://www.youtube-nocookie.com/embed/yXaJ-Rjm_3I"
+                                title="YouTube video player"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Test Portal Section -->
+    <section class="test-portal-section">
+    <div class="test-container">
+        <div class="test-content">
+            <h2 class="test-portal-title">اختبار الرخصة الشاملة لريادة الاعمال (ILFEN)</h2>
+            <p class="test-portal-description">
+                يمكن التقديم للاختبار وإجراء الاختبار بشكل آلي والحصول على شهادة Ilfen من خلال البوابة.
+            </p>
+        </div>
+
+        <div class="test-button-side">
+            <a href="https://cert.ilfen.com/login" class="test-button" id="testPortalButton" target="_blank">
+                    بوابة الاختبار →
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Scroll-triggered animation - cards scale up from center when scrolled into view
+    document.addEventListener('DOMContentLoaded', function() {
+        const programCards = document.querySelectorAll('.program-card');
+        const videoCard = document.querySelector('.video-card');
+
+        // Create Intersection Observer to detect when elements come into view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Add staggered delay based on element position
+                    const index = Array.from(programCards).indexOf(entry.target);
+                    const delay = index >= 0 ? index * 150 : 0;
+
+                    setTimeout(() => {
+                        entry.target.classList.add('animate-in');
+                    }, delay);
+
+                    // Stop observing after animation is triggered
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1, // Trigger when 10% of element is visible
+            rootMargin: '0px 0px -50px 0px' // Adjust trigger point slightly upward
+        });
+
+        // Observe all program cards
+        programCards.forEach(card => {
+            observer.observe(card);
+        });
+
+        // Observe video card separately
+        observer.observe(videoCard);
+    });
+</script>
+{% endblock %}

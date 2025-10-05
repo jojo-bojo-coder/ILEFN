@@ -1,0 +1,139 @@
+/* RTL Specific Styles */
+[dir="rtl"] {
+    text-align: right;
+}
+
+[dir="rtl"] body {
+    direction: rtl;
+    text-align: right;
+}
+
+[dir="rtl"] .elementor-row {
+    margin: 0 -15px;
+    direction: rtl;
+}
+
+[dir="rtl"] .elementor-nav-menu--main {
+    justify-content: center;
+    direction: rtl;
+}
+
+[dir="rtl"] .elementor-nav-menu {
+    direction: rtl;
+}
+
+[dir="rtl"] .elementor-nav-menu .sub-menu {
+    right: auto;
+    left: 0;
+    text-align: right;
+}
+
+[dir="rtl"] .elementor-counter {
+    text-align: center;
+}
+
+[dir="rtl"] .elementor-counter-title {
+    text-align: center;
+}
+
+[dir="rtl"] .elementor-counter-number-wrapper {
+    text-align: center;
+}
+
+/* RTL Header Styles */
+[dir="rtl"] .elementor-21087 .elementor-container {
+    direction: rtl;
+}
+
+[dir="rtl"] .elementor-21087 .elementor-col-30 {
+    order: 1;
+}
+
+[dir="rtl"] .elementor-21087 .elementor-col-50 {
+    order: 2;
+}
+
+[dir="rtl"] .elementor-21087 .elementor-col-20 {
+    order: 3;
+}
+
+/* RTL Hero Section */
+[dir="rtl"] .elementor-element-5def900 h6,
+[dir="rtl"] .elementor-element-5def900 h1 {
+    text-align: center;
+    direction: rtl;
+}
+
+[dir="rtl"] .elementor-element-5def900 .elementor-widget-wrap {
+    text-align: center;
+    direction: rtl;
+}
+
+/* RTL Call to Action */
+[dir="rtl"] .elementor-element-46cd81d .elementor-col-60 {
+    padding-right: 40px;
+    padding-left: 15px;
+    text-align: right;
+}
+
+[dir="rtl"] .elementor-element-46cd81d .elementor-col-40 {
+    text-align: center;
+}
+
+/* RTL About Section */
+[dir="rtl"] .elementor-element-782d895 h2,
+[dir="rtl"] .elementor-element-782d895 p {
+    text-align: center;
+    direction: rtl;
+}
+
+/* RTL Button Alignment */
+[dir="rtl"] .edublink-button-item {
+    direction: rtl;
+}
+
+/* RTL Navigation Adjustments */
+[dir="rtl"] .elementor-nav-menu li a::after {
+    right: 0;
+    left: auto;
+}
+
+/* RTL Mobile Adjustments */
+@media (max-width: 1024px) {
+    [dir="rtl"] .elementor-element-46cd81d .elementor-col-60 {
+        padding-right: 15px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    [dir="rtl"] .elementor-21087 .elementor-container {
+        direction: rtl;
+    }
+
+    [dir="rtl"] .elementor-nav-menu {
+        direction: rtl;
+    }
+}
+
+/* Arabic Font Optimization */
+[dir="rtl"] * {
+    font-family: 'IBM Plex Sans Arabic';
+}
+
+/* RTL Text Flow */
+[dir="rtl"] .heading,
+[dir="rtl"] .sub-heading,
+[dir="rtl"] .elementor-heading-title {
+    text-align: inherit;
+    direction: rtl;
+}
+
+/* RTL Flex Direction Corrections */
+[dir="rtl"] .elementor-row {
+    flex-direction: row;
+}
+
+[dir="rtl"] .elementor-nav-menu {
+    flex-direction: row;
+}

@@ -1,0 +1,549 @@
+{% extends "director_base.html" %}
+{% load static %}
+
+{% block title %}حذف السؤال - المدير{% endblock %}
+{% block page_title %}حذف السؤال{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Enhanced Content Header */
+    .content-header {
+        margin-bottom: 36px;
+        padding-bottom: 24px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+
+    .page-title {
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .page-title::before {
+        content: '❓';
+        font-size: 36px;
+    }
+
+    .breadcrumb {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        color: #666;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .breadcrumb a {
+        color: var(--primary-color);
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .breadcrumb a:hover {
+        color: var(--accent-color);
+    }
+
+    /* Enhanced Header Actions */
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .btn-danger {
+        background: linear-gradient(135deg, var(--danger-color) 0%, #c82333 100%);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: var(--transition);
+        box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+    }
+
+    .btn-danger:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(220, 53, 69, 0.3);
+        color: white;
+    }
+
+    .btn-secondary {
+        background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: var(--transition);
+        box-shadow: 0 4px 12px rgba(108, 117, 125, 0.2);
+        margin-top:20px;
+    }
+
+    .btn-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(108, 117, 125, 0.3);
+        color: white;
+    }
+
+    /* Enhanced Card */
+    .card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        border: 1px solid #f0f0f0;
+        margin-bottom: 32px;
+        overflow: hidden;
+        transition: var(--transition);
+    }
+
+    .card:hover {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .card-header {
+        padding: 24px 28px;
+        border-bottom: 1px solid #f0f0f0;
+        background: linear-gradient(135deg, #fdf2f2 0%, #fce8e8 100%);
+    }
+
+    .card-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #dc3545;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .card-body {
+        padding: 28px;
+    }
+
+    /* Enhanced Alert */
+    .alert {
+        padding: 20px 24px;
+        border-radius: 12px;
+        margin-bottom: 24px;
+        border: 1px solid transparent;
+        border-right: 4px solid;
+    }
+
+    .alert-danger {
+        color: #721c24;
+        background: linear-gradient(135deg, #fdf2f2 0%, #fce8e8 100%);
+        border-color: #f5c6cb;
+        border-right-color: #dc3545;
+    }
+
+    .alert-danger h4 {
+        color: #dc3545;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    /* Question Details */
+    .confirmation-details {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        padding: 24px;
+        border-radius: 12px;
+        border: 1px solid #e9ecef;
+        margin-bottom: 32px;
+    }
+
+    .confirmation-details h5 {
+        color: #2A5F73;
+        font-weight: 600;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .detail-item {
+        margin-bottom: 16px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .detail-item:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    .detail-item strong {
+        color: #2A5F73;
+        min-width: 120px;
+        font-size: 14px;
+    }
+
+    .detail-item p {
+        margin: 0;
+        flex: 1;
+    }
+
+    /* Badges */
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 12px;
+        font-size: 12px;
+        font-weight: 600;
+        border-radius: 20px;
+        gap: 6px;
+    }
+
+    .badge-success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .badge-danger {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f1b0b7;
+    }
+
+    .badge-warning {
+        background: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeaa7;
+    }
+
+    .badge-secondary {
+        background: #6c757d;
+        color: white;
+        border: 1px solid #5a6268;
+    }
+
+    .trait-badge {
+        background: linear-gradient(135deg, #2A5F73 0%, #1e4757 100%);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        box-shadow: 0 2px 4px rgba(42, 95, 115, 0.2);
+    }
+
+    .order-badge {
+        background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 14px;
+        min-width: 40px;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(108, 117, 125, 0.2);
+    }
+
+    /* Form Styling */
+    .form-group {
+        margin-bottom: 24px;
+    }
+
+    .form-check {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 16px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        border: 1px solid #e9ecef;
+        margin-bottom: 20px;
+    }
+
+    .form-check-input {
+        width: 20px;
+        height: 20px;
+        margin: 0;
+        border-radius: 6px;
+        border: 2px solid #e9ecef;
+        position: relative;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .form-check-input:checked {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    .form-check-label {
+        font-weight: 500;
+        color: #333;
+        cursor: pointer;
+        margin: 0;
+        font-size: 15px;
+    }
+
+    /* Form Actions */
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-start;
+        margin-top: 32px;
+        padding-top: 24px;
+        border-top: 1px solid #f0f0f0;
+    }
+
+    /* Warning Icon Animation */
+    .warning-icon {
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.1);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    /* Question Text Styling */
+    .question-text {
+        background: white;
+        padding: 16px;
+        border-radius: 8px;
+        border: 1px solid #e9ecef;
+        font-style: italic;
+        color: #666;
+        line-height: 1.5;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .card-body {
+            padding: 20px;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .btn-danger, .btn-secondary {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .confirmation-details {
+            padding: 16px;
+        }
+
+        .detail-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .detail-item strong {
+            min-width: auto;
+        }
+
+        .form-check {
+            padding: 12px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="page-title">
+                <span class="junior-indicator">أسئلة</span>
+                حذف السؤال
+            </h1>
+            <div class="breadcrumb">
+                <a href="{% url 'director_dashboard' %}">الرئيسية</a>
+                <span>/</span>
+                <a href="{% url 'question_list' %}">الأسئلة</a>
+                <span>/</span>
+                <span>حذف السؤال</span>
+            </div>
+        </div>
+        <a href="{% url 'question_list' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-right"></i>
+            رجوع للقائمة
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="fas fa-trash text-danger"></i>
+            تأكيد الحذف
+        </h3>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-danger">
+            <h4>
+                <i class="fas fa-exclamation-triangle warning-icon"></i>
+                تحذير! هذا الإجراء لا يمكن التراجع عنه
+            </h4>
+            <p class="mb-0">أنت على وشك حذف السؤال التالي بشكل دائم. هذه العملية لا يمكن استعادتها.</p>
+        </div>
+
+        <div class="confirmation-details">
+            <h5>
+                <i class="fas fa-info-circle"></i>
+                تفاصيل السؤال المراد حذفه:
+            </h5>
+            <div class="detail-item">
+                <strong>نص السؤال:</strong>
+                <div class="question-text">
+                    {{ question.text }}
+                </div>
+            </div>
+            <div class="detail-item">
+                <strong>السمة المرتبطة:</strong>
+                <span class="trait-badge">
+                    <i class="fas fa-tag"></i>
+                    {{ question.trait.name }}
+                </span>
+            </div>
+            <div class="detail-item">
+                <strong>الترتيب:</strong>
+                <span class="order-badge">{{ question.order }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>الحالة:</strong>
+                {% if question.is_active %}
+                <span class="badge badge-success">
+                    <i class="fas fa-check"></i>
+                    نشط
+                </span>
+                {% else %}
+                <span class="badge badge-danger">
+                    <i class="fas fa-times"></i>
+                    غير نشط
+                </span>
+                {% endif %}
+            </div>
+            <div class="detail-item">
+                <strong>عكس التقييم:</strong>
+                {% if question.is_reverse_scored %}
+                <span class="badge badge-warning">
+                    <i class="fas fa-exchange-alt"></i>
+                    نعم
+                </span>
+                {% else %}
+                <span class="badge badge-secondary">
+                    <i class="fas fa-minus"></i>
+                    لا
+                </span>
+                {% endif %}
+            </div>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <p class="mb-3"><strong>هل أنت متأكد من رغبتك في حذف هذا السؤال؟</strong></p>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="confirmDelete" required>
+                    <label class="form-check-label" for="confirmDelete">
+                        نعم، أنا متأكد من حذف هذا السؤال وأدرك أن هذا الإجراء لا يمكن التراجع عنه
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-danger" id="deleteBtn" disabled>
+                    <i class="fas fa-trash"></i>
+                    حذف السؤال
+                </button>
+                <a href="{% url 'question_list' %}" class="btn btn-secondary">
+                    <i class="fas fa-times"></i>
+                    إلغاء والعودة
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const confirmCheckbox = document.getElementById('confirmDelete');
+        const deleteBtn = document.getElementById('deleteBtn');
+
+        confirmCheckbox.addEventListener('change', function() {
+            deleteBtn.disabled = !this.checked;
+            if (this.checked) {
+                deleteBtn.style.background = 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)';
+            } else {
+                deleteBtn.style.background = 'linear-gradient(135deg, #6c757d 0%, #5a6268 100%)';
+            }
+        });
+
+        // Add confirmation for delete action
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(e) {
+            if (!confirmCheckbox.checked) {
+                e.preventDefault();
+                alert('⚠️ يرجى تأكيد الحذف أولاً عن طريق تحديد خانة الاختيار');
+                return;
+            }
+
+            if (!confirm('❌ هل أنت متأكد تمامًا من حذف هذا السؤال؟ هذا الإجراء نهائي ولا يمكن التراجع عنه.')) {
+                e.preventDefault();
+            }
+        });
+
+        // Add visual feedback for buttons
+        deleteBtn.addEventListener('mouseover', function() {
+            if (!this.disabled) {
+                this.style.transform = 'translateY(-2px) scale(1.02)';
+            }
+        });
+
+        deleteBtn.addEventListener('mouseout', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
+
+        // Add order badge color based on value
+        const orderBadge = document.querySelector('.order-badge');
+        if (orderBadge) {
+            const order = parseInt(orderBadge.textContent);
+            if (order <= 5) {
+                orderBadge.style.background = 'linear-gradient(135deg, #28a745 0%, #218838 100%)';
+            } else if (order <= 10) {
+                orderBadge.style.background = 'linear-gradient(135deg, #ffc107 0%, #e0a800 100%)';
+            } else {
+                orderBadge.style.background = 'linear-gradient(135deg, #fd7e14 0%, #e55a00 100%)';
+            }
+        }
+    });
+</script>
+{% endblock %}

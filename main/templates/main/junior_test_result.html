@@ -1,0 +1,802 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نتيجة مقياس الناشئين - ILFEN</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', 'IBM Plex Sans Arabic', sans-serif;
+            background: #f5f7fa;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        .header {
+            background: white;
+            padding: 20px 0;
+            position: relative;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a1a2e;
+            line-height: 1.6;
+        }
+
+        .logo-subtitle {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #e85a71;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #d64764;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #1a1a2e;
+            border: 2px solid #e9ecef;
+        }
+
+        /* Main Container */
+        .result-container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 40px;
+        }
+
+        /* Result Header Cards */
+        .result-header-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .result-card {
+            background: white;
+            border-radius: 25px;
+            padding: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+
+        .result-card.score {
+            background: linear-gradient(135deg, #e85a71 0%, #d64764 100%);
+            color: white;
+        }
+
+        .result-card.time {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: white;
+        }
+
+        .result-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .result-icon i {
+            font-size: 36px;
+            color: white;
+        }
+
+        .result-info h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            opacity: 0.95;
+        }
+
+        .result-value {
+            font-size: 48px;
+            font-weight: 700;
+        }
+
+        /* Description Box */
+        .description-box {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border-radius: 25px;
+            padding: 40px 50px;
+            margin-bottom: 40px;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(52, 152, 219, 0.3);
+        }
+
+        .description-icon {
+            position: absolute;
+            top: 30px;
+            left: 40px;
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .description-icon i {
+            font-size: 28px;
+        }
+
+        .description-box h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            padding-right: 80px;
+        }
+
+        .description-box p {
+            font-size: 16px;
+            line-height: 2;
+            opacity: 0.95;
+        }
+
+        .description-box ul {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .description-box li {
+            padding: 10px 0;
+            padding-right: 30px;
+            position: relative;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .description-box li:before {
+            content: '•';
+            position: absolute;
+            right: 10px;
+            font-size: 20px;
+        }
+
+        /* Chart Section */
+        .chart-section {
+            background: white;
+            border-radius: 25px;
+            padding: 50px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+
+        .chart-title {
+            text-align: center;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 40px;
+        }
+
+        .chart-title span {
+            color: #e85a71;
+        }
+
+        .chart-container {
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Certificate Section */
+        .certificate-section {
+            background: white;
+            border-radius: 25px;
+            padding: 50px;
+            margin-bottom: 40px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+
+        .certificate-preview {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 60px;
+            background: white;
+            border: 20px solid;
+            border-image: linear-gradient(135deg, #4CAF50, #2196F3, #FF9800, #9C27B0) 1;
+            border-radius: 15px;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .cert-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+        }
+
+        .cert-logo {
+            text-align: right;
+        }
+
+        .cert-logo-title {
+            font-size: 16px;
+            color: #3498db;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .cert-logo-main {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        .cert-badge {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+        }
+
+        .cert-title {
+            font-size: 18px;
+            color: #3498db;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .cert-main-title {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .cert-content {
+            font-size: 16px;
+            line-height: 2;
+            color: #555;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .cert-score {
+            font-size: 22px;
+            color: #f39c12;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+
+        .cert-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 60px;
+        }
+
+        .cert-date, .cert-signature {
+            text-align: center;
+        }
+
+        .cert-date-label, .cert-signature-label {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 10px;
+        }
+
+        .cert-date-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .signature-line {
+            width: 150px;
+            height: 2px;
+            background: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .cert-websites {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            color: #3498db;
+        }
+
+        /* Download Button */
+        .download-btn {
+            background: linear-gradient(135deg, #e85a71 0%, #d64764 100%);
+            color: white;
+            padding: 18px 50px;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px rgba(232, 90, 113, 0.35);
+            text-decoration: none;
+            margin-top: 30px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(232, 90, 113, 0.45);
+        }
+
+        /* Retry Button */
+        .retry-btn {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+            padding: 18px 50px;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px rgba(243, 156, 18, 0.35);
+            text-decoration: none;
+            margin: 40px auto 0;
+            width: 100%;
+            max-width: 500px;
+            justify-content: center;
+        }
+
+        .retry-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(243, 156, 18, 0.45);
+        }
+
+        /* Decorative Dots */
+        .dots-decoration {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .dot {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            opacity: 0.6;
+        }
+
+        /* Footer */
+        .footer {
+            background: #f5f7fa;
+            padding: 80px 0 40px;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 80px;
+            margin-bottom: 40px;
+        }
+
+        .footer-info h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 20px;
+        }
+
+        .footer-subtitle {
+            font-size: 26px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 20px;
+        }
+
+        .footer-info p {
+            font-size: 16px;
+            line-height: 1.9;
+            color: #666;
+        }
+
+        .contact-form h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #e85a71;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px 18px;
+            border: none;
+            background: white;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .form-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(232, 90, 113, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: #e85a71;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #d64764;
+            transform: translateY(-2px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 35px;
+            border-top: 1px solid #ddd;
+            font-size: 15px;
+            color: #666;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-left: 40px;
+            padding-right: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .result-header-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-text">
+                    مقياس ILFEN<br>
+                    <span class="logo-subtitle">للناشئين</span>
+                </div>
+            </div>
+            <div class="header-buttons">
+                <a href="{% url 'junior_ilfen_test' %}" class="btn btn-secondary">الرئيسية</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Decorative Dots -->
+    <div class="dots-decoration">
+        <div class="dot" style="top: 10%; left: 5%; background: #3498db;"></div>
+        <div class="dot" style="top: 15%; left: 15%; background: #2ecc71;"></div>
+        <div class="dot" style="top: 8%; right: 10%; background: #f39c12;"></div>
+        <div class="dot" style="top: 20%; right: 20%; background: #e85a71;"></div>
+        <div class="dot" style="top: 12%; right: 5%; background: #9b59b6;"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="result-container">
+        <!-- Page Title -->
+        <h1 style="text-align: center; font-size: 42px; font-weight: 700; margin-bottom: 40px; color: #2c3e50;">
+            نتيجة <span style="color: #e85a71;">المقياس</span>
+        </h1>
+
+        <!-- Result Header -->
+        <div class="result-header-cards">
+            <div class="result-card score">
+                <div class="result-icon">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <div class="result-info">
+                    <h3>الدرجة</h3>
+                    <div class="result-value">{{ result.total_score|floatformat:0 }}%</div>
+                </div>
+            </div>
+
+            <div class="result-card time">
+                <div class="result-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="result-info">
+                    <h3>الزمن المستغرق</h3>
+                    <div class="result-value">{{ time_taken }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Description Box -->
+        <div class="description-box">
+            <div class="description-icon">
+                <i class="fas fa-info-circle"></i>
+            </div>
+            <h3>وصف سماتك الريادية</h3>
+            <p>أنت أثبت... أنك فريق من أن تمتلك سمات رائد الأعمال الناجح!</p>
+            <ul>
+                <li>لديك مهارات رائعة تساعدك على الدخول في مجال ريادة الأعمال وكذا يظهر الرسم البياني قدراتك بعدة من الصعبات التي يتمتع بها رائد الأعمال النموذجي.</li>
+                <li>أنت تمتلك سمات مميزة لكنك تحتاج إلى تحسين جاد في بعض المهارات التي تحتاج للتطور يمكنك ذلك من خلال التعلم المستمر وحضور الدورات التدريبية</li>
+                <li>تذكر! أن النجاح في ريادة الأعمال يبنيه رحلة ممتعة مليئة بالتحديات والتجارب المفيدة. استغل كل فرصة لتتعلم أشياء جديدة وتطور نفسك، وعع العليل من الجهد والإصرار ستصل إلى أهدافك وتحقق أحلامك.</li>
+                <li>ثق بنفسك وأعمل بجد، فالعمل الجاد هو طريقك للقمة!</li>
+            </ul>
+        </div>
+
+        <!-- Chart Section -->
+        <div class="chart-section">
+            <h2 class="chart-title">التحليل <span>البياني</span></h2>
+            <div class="chart-container">
+                <canvas id="radarChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Certificate Section -->
+            <div class="certificate-section">
+                {% if result.certificate_path %}
+                <div class="certificate-preview" style="padding: 0; border: none; margin-bottom: 30px;">
+                    <img src="{% get_media_prefix %}{{ result.certificate_path }}"
+                         alt="Certificate"
+                         style="width: 100%; max-width: 800px; margin: 0 auto; display: block; border-radius: 15px; box-shadow: 0 20px 60px rgba(0,0,0,0.15);">
+                </div>
+                {% else %}
+                <!-- Fallback to the styled certificate preview if no certificate image exists -->
+                <div class="certificate-preview">
+                    <div class="cert-header">
+                        <div class="cert-logo">
+                            <div class="cert-logo-title">الرخصة الشبابية لريادة الأعمال</div>
+                            <div class="cert-logo-main">Inclusive Licence For Entrepreneurship</div>
+                        </div>
+                        <div class="cert-badge">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                    </div>
+
+                    <div class="cert-title">اختبار ILFEN لتقييم سمات رائد الأعمال</div>
+                    <h1 class="cert-main-title">{{ registration.name }}</h1>
+
+                    <div class="cert-content">
+                        على المشاركة في اختبار السمات الريادية<br>
+                        والحصول على درجة <span class="cert-score">{{ result.total_score|floatformat:0 }}%</span>
+                    </div>
+
+                    <div class="cert-footer">
+                        <div class="cert-date">
+                            <div class="cert-date-label">تاريخ الإصدار</div>
+                            <div class="cert-date-value">{{ date }}</div>
+                        </div>
+                        <div class="cert-signature">
+                            <div class="signature-line"></div>
+                            <div class="cert-date-label">التوقيع</div>
+                        </div>
+                    </div>
+
+                    <div class="cert-websites">
+                        www.edarah.net - www.ilfen.com
+                    </div>
+                </div>
+                {% endif %}
+
+                <a href="{% url 'junior_download_certificate' %}" class="download-btn">
+                    <i class="fas fa-download"></i>
+                    تحميل الشهادة
+                </a>
+            </div>
+
+        <!-- Retry Button -->
+        <a href="{% url 'junior_ilfen_test' %}" class="retry-btn">
+            <i class="fas fa-redo"></i>
+            إعادة المقياس (ابدأ من جديد)
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-info">
+                <h3>مقياس ILFEN</h3>
+                <p class="footer-subtitle">للناشئين</p>
+                <p>
+                    مقياس ILFEN للناشئين لتقييم سمات رائد الأعمال سوف يساعدك على التعرف على استعدادك لإنشاء عملك الخاص ومدى روح المبادرة والريادية من وجهات نظر مختلفة. كما سوف يقوم هذا الاختبار على مساعدتك لقياس وفهم بعض الصفات السلوكية والمهارات اللازمة للنجاح في مسار ريادة الأعمال.
+                </p>
+            </div>
+
+            <div class="contact-form">
+                <h3>تواصل معنا</h3>
+                <form>
+                    <div class="form-group">
+                        <input type="text" class="form-input" placeholder="الاسم كامل" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" class="form-input" placeholder="البريد الإلكتروني" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-input form-textarea" placeholder="الرسالة" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">إرسال</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>جميع الحقوق محفوظة لـ ILFEN © 2025</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script>
+        // Radar Chart
+        const ctx = document.getElementById('radarChart').getContext('2d');
+
+        const traitScores = {{ trait_scores|safe }};
+        const labels = Object.keys(traitScores);
+        const data = Object.values(traitScores).map(t => t.percentage);
+        const maxScore = 10; // Max score for radar chart
+        const normalizedData = data.map(score => (score / 100) * maxScore);
+
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'النتيجة الحالية',
+                    data: normalizedData,
+                    backgroundColor: 'rgba(232, 90, 113, 0.2)',
+                    borderColor: 'rgba(232, 90, 113, 1)',
+                    borderWidth: 3,
+                    pointBackgroundColor: 'rgba(232, 90, 113, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(232, 90, 113, 1)',
+                    pointRadius: 5,
+                    pointHoverRadius: 7
+                }, {
+                    label: 'رائد الأعمال النموذجي',
+                    data: Array(labels.length).fill(maxScore),
+                    backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                    borderColor: 'rgba(52, 152, 219, 0.8)',
+                    borderWidth: 2,
+                    borderDash: [5, 5],
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: maxScore,
+                        ticks: {
+                            stepSize: 2,
+                            font: {
+                                family: 'Tajawal',
+                                size: 12
+                            }
+                        },
+                        pointLabels: {
+                            font: {
+                                family: 'Tajawal',
+                                size: 14,
+                                weight: '600'
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                family: 'Tajawal',
+                                size: 14
+                            },
+                            padding: 20,
+                            usePointStyle: true
+                        }
+                    }
+                }
+            }
+        });
+
+        // Contact form
+        document.querySelector('.contact-form form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.');
+            this.reset();
+        });
+    </script>
+</body>
+</html>

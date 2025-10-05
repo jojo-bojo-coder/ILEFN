@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}تسجيل دخول المدير - ILEFN{% endblock %}
+
+{% block extra_css %}
+<style>
+    .director-login-page {
+        background: linear-gradient(135deg, #2A5F73 0%, #1E4A5C 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .login-container {
+        background: white;
+        border-radius: 20px;
+        padding: 50px;
+        max-width: 450px;
+        width: 100%;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        position: relative;
+        z-index: 1000;
+    }
+
+    .login-logo {
+        max-width: 150px;
+        margin-bottom: 30px;
+    }
+
+    .login-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--edublink-color-heading);
+        margin-bottom: 10px;
+    }
+
+    .login-subtitle {
+        color: var(--edublink-color-body);
+        margin-bottom: 30px;
+    }
+
+    .login-form {
+        text-align: right;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--edublink-color-heading);
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid rgba(42, 95, 115, 0.1);
+        border-radius: 10px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        font-family: 'IBM Plex Sans Arabic', sans-serif;
+        background: white;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: var(--edublink-color-primary);
+        box-shadow: 0 0 0 3px rgba(42, 95, 115, 0.1);
+    }
+
+    .login-btn {
+        background: linear-gradient(135deg, var(--edublink-color-primary) 0%, var(--edublink-color-primary-alt) 100%);
+        color: white;
+        padding: 15px 40px;
+        font-size: 18px;
+        font-weight: 600;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+        margin-top: 10px;
+        position: relative;
+        z-index: 1001;
+    }
+
+    .login-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(42, 95, 115, 0.3);
+    }
+
+    .error-message {
+        background: #fee;
+        color: #c33;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border-right: 4px solid #c33;
+    }
+
+    /* Override any parent styles */
+    .director-login-page * {
+        box-sizing: border-box;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="director-login-page">
+    <div class="login-container">
+        <img src="{% static 'images/logo-cropped.png' %}" alt="ILEFN" class="login-logo">
+        <h1 class="login-title">تسجيل دخول المدير</h1>
+        <p class="login-subtitle">الرخصة الدولية لريادة الأعمال</p>
+
+        {% if form.non_field_errors %}
+            <div class="error-message">
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="post" class="login-form" action="{% url 'director_login' %}" id="loginForm" onsubmit="return handleFormSubmit()">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="id_username" class="form-label">اسم المستخدم</label>
+                <input type="text" name="username" id="id_username" class="form-input" required autocomplete="username" value="{{ form.username.value|default:'' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="id_password" class="form-label">كلمة المرور</label>
+                <input type="password" name="password" id="id_password" class="form-input" required autocomplete="current-password">
+            </div>
+
+            <button type="submit" class="login-btn" id="submitBtn">
+                دخول
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Prevent any JavaScript interference with form submission
+document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.getElementById('loginForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    if (loginForm) {
+        // Remove any event listeners that might interfere
+        loginForm.replaceWith(loginForm.cloneNode(true));
+
+        // Re-get the form after cloning
+        const newForm = document.getElementById('loginForm');
+        const newSubmitBtn = document.getElementById('submitBtn');
+
+        // Add clean submit handler
+        newForm.addEventListener('submit', function(e) {
+            console.log('Clean form submission - allowing to proceed');
+            // Don't prevent default - let form submit normally
+        });
+
+        // Prevent any parent event listeners from interfering
+        newSubmitBtn.addEventListener('click', function(e) {
+            console.log('Clean button click - allowing form submission');
+            e.stopPropagation();
+        });
+
+        // Also stop propagation on form clicks
+        newForm.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    }
+});
+
+// Override any problematic global handlers temporarily
+const originalQuerySelectorAll = document.querySelectorAll;
+document.querySelectorAll = function(selector) {
+    const elements = originalQuerySelectorAll.apply(this, arguments);
+
+    // Don't apply smooth scrolling to form buttons
+    if (selector === 'a[href^="#"]') {
+        return Array.from(elements).filter(el => {
+            return !el.closest('form') && el.type !== 'submit';
+        });
+    }
+
+    return elements;
+};
+</script>
+{% endblock %}

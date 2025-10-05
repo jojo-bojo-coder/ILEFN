@@ -1,0 +1,511 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block body_class %}test-registration page-template-default page page-id-registration wp-embed-responsive edublink-page-content edublink-page-breadcrumb-disable edublink-page-boxed edublink-page-sidebar-disable theme-name-edublink elementor-default elementor-kit-8 elementor-page elementor-page-registration{% endblock %}
+
+{% block content %}
+<style>
+    /* Test Registration Page Styles */
+    .test-registration-page {
+        background: white;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 80px 20px;
+        position: relative;
+    }
+
+    .registration-container {
+        background: white;
+        border-radius: 25px;
+        padding: 0;
+        max-width: 1200px;
+        width: 100%;
+        display: flex;
+        align-items: stretch;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        position: relative;
+        min-height: 600px;
+    }
+
+    /* Left side - Image and Description */
+    .registration-info-side {
+        flex: 0 0 45%;
+        background: linear-gradient(135deg, #2A5F73 0%, #1E4A5C 100%);
+        padding: 60px 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: white;
+        position: relative;
+    }
+
+    .registration-info-side::before {
+        content: '';
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 80px;
+        height: 80px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        z-index: 1;
+    }
+
+    .registration-info-side::after {
+        content: '';
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        width: 60px;
+        height: 60px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        z-index: 1;
+    }
+
+    .info-logo {
+        max-width: 200px;
+        height: auto;
+        margin-bottom: 30px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .info-description {
+        font-size: 16px;
+        line-height: 1.7;
+        color: rgba(255, 255, 255, 0.9);
+        position: relative;
+        z-index: 2;
+        margin: 0;
+    }
+
+    /* Right side - Form */
+    .registration-form-side {
+        flex: 0 0 55%;
+        padding: 60px 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: white;
+    }
+
+    .form-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .form-title {
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--edublink-color-heading);
+        margin-bottom: 15px;
+        line-height: 1.3;
+    }
+
+    .form-subtitle {
+        font-size: 16px;
+        color: var(--edublink-color-body);
+        margin: 0;
+        line-height: 1.5;
+    }
+
+    .registration-form {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .form-label {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--edublink-color-heading);
+        text-align: right;
+    }
+
+    .required-text {
+        color: #e74c3c;
+        font-weight: 400;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 16px 20px;
+        border: 2px solid rgba(42, 95, 115, 0.1);
+        border-radius: 12px;
+        font-size: 15px;
+        background: white;
+        transition: all 0.3s ease;
+        font-family: 'IBM Plex Sans Arabic', sans-serif;
+        color: var(--edublink-color-heading);
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: var(--edublink-color-primary);
+        box-shadow: 0 0 0 3px rgba(42, 95, 115, 0.1);
+        background: #f8f9ff;
+    }
+
+    .form-input::placeholder {
+        color: #999;
+        font-size: 14px;
+    }
+
+    .form-input[dir="ltr"] {
+        text-align: left;
+    }
+
+    .submit-button {
+        background: linear-gradient(135deg, var(--edublink-color-primary) 0%, var(--edublink-color-primary-alt) 100%);
+        color: white;
+        padding: 18px 40px;
+        font-size: 18px;
+        font-weight: 600;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 25px rgba(42, 95, 115, 0.3);
+        margin-top: 15px;
+        text-transform: none;
+        font-family: 'IBM Plex Sans Arabic', sans-serif;
+    }
+
+    .submit-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 35px rgba(42, 95, 115, 0.4);
+        background: linear-gradient(135deg, var(--edublink-color-primary-alt) 0%, var(--edublink-color-primary) 100%);
+    }
+
+    .submit-button:active {
+        transform: translateY(0);
+    }
+
+    /* Error Message Box */
+    .error-message-box {
+        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        color: white;
+        padding: 16px 24px;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 500;
+        margin-bottom: 25px;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        animation: slideInDown 0.5s ease;
+    }
+
+    @keyframes slideInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Error Styles */
+    .form-input.error {
+        border-color: #e74c3c;
+        box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+    }
+
+    .error-message {
+        color: #e74c3c;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
+    /* Form validation errors */
+    .errorlist {
+        list-style: none;
+        padding: 0;
+        margin: 5px 0 0 0;
+    }
+
+    .errorlist li {
+        color: #e74c3c;
+        font-size: 14px;
+        background: rgba(231, 76, 60, 0.1);
+        padding: 8px 12px;
+        border-radius: 6px;
+        margin-bottom: 5px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+        .registration-container {
+            max-width: 900px;
+        }
+
+        .registration-info-side {
+            flex: 0 0 40%;
+            padding: 40px 30px;
+        }
+
+        .registration-form-side {
+            flex: 0 0 60%;
+            padding: 40px 35px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .test-registration-page {
+            padding: 40px 15px;
+        }
+
+        .registration-container {
+            flex-direction: column;
+            max-width: 500px;
+            min-height: auto;
+        }
+
+        .registration-info-side {
+            flex: none;
+            padding: 40px 30px;
+            order: 1;
+        }
+
+        .registration-form-side {
+            flex: none;
+            padding: 40px 30px;
+            order: 2;
+        }
+
+        .form-title {
+            font-size: 28px;
+        }
+
+        .info-logo {
+            max-width: 150px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .registration-container {
+            border-radius: 15px;
+        }
+
+        .registration-form-side,
+        .registration-info-side {
+            padding: 30px 25px;
+        }
+
+        .form-title {
+            font-size: 24px;
+        }
+
+        .form-input {
+            padding: 14px 16px;
+        }
+
+        .submit-button {
+            padding: 16px 30px;
+            font-size: 16px;
+        }
+    }
+
+    /* Animation for page load */
+    .registration-container {
+        animation: fadeInUp 0.8s ease;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<!-- Test Registration Page -->
+<section class="test-registration-page">
+    <div class="registration-container">
+        <!-- Left side - Info and Logo -->
+        <div class="registration-info-side">
+            <img src="{% static 'images/logo-cropped.png' %}" alt="الرخصة الشاملة لريادة الأعمال" class="info-logo" />
+            <p class="info-description">
+                هذا الاختبار صمم خصيصًا لمساعدتك لاكتشاف جاهزيتك لبدء الأعمال الابتكارية بنجاح. قس مدى استعدادك بحيادية واستكشف مكامن التطوير.
+            </p>
+        </div>
+
+        <!-- Right side - Registration Form -->
+        <div class="registration-form-side">
+            <div class="form-header">
+                <h1 class="form-title">التسجيل بالاختبار</h1>
+                <p class="form-subtitle">منصة اختبارات الرخصة الشاملة لريادة الأعمال</p>
+            </div>
+
+            {% if error_message %}
+                <div class="error-message-box">
+                    {{ error_message }}
+                </div>
+            {% endif %}
+
+            <form method="post" class="registration-form">
+            {% csrf_token %}
+
+            <!-- Name Field -->
+            <div class="form-group">
+                <label for="id_name" class="form-label">
+                    الاسم <span class="required-text">(باللغة الإنجليزية) *</span>
+                </label>
+                <input type="text"
+                       name="name"
+                       id="id_name"
+                       class="form-input"
+                       placeholder="Enter your name in English"
+                       dir="ltr"
+                       value="{{ form.name.value|default:'' }}"
+                       required>
+                {% if form.name.errors %}
+                    {% for error in form.name.errors %}
+                        <div class="error-message">{{ error }}</div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <!-- Email Field -->
+            <div class="form-group">
+                <label for="id_email" class="form-label">
+                    البريد الإلكتروني <span class="required-text">*</span>
+                </label>
+                <input type="email"
+                       name="email"
+                       id="id_email"
+                       class="form-input"
+                       placeholder="example@email.com"
+                       dir="ltr"
+                       value="{{ form.email.value|default:'' }}"
+                       required>
+                {% if form.email.errors %}
+                    {% for error in form.email.errors %}
+                        <div class="error-message">{{ error }}</div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <button type="submit" class="submit-button">
+                الدخول للاختبار
+            </button>
+        </form>
+        </div>
+    </div>
+</section>
+
+<!-- Font Awesome CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('.registration-form');
+
+    if (form) {
+        console.log('Registration form found, initializing validation...');
+
+        // Remove any novalidate attribute
+        form.removeAttribute('novalidate');
+
+        form.addEventListener('submit', function(e) {
+            console.log('Form submission triggered');
+            let isValid = true;
+
+            // Validate name (English characters only)
+            const nameInput = document.getElementById('id_name');
+            const nameValue = nameInput ? nameInput.value.trim() : '';
+            const englishRegex = /^[a-zA-Z\s]+$/;
+
+            if (!nameValue) {
+                isValid = false;
+                showError(nameInput, 'الرجاء إدخال الاسم');
+            } else if (!englishRegex.test(nameValue)) {
+                isValid = false;
+                showError(nameInput, 'الرجاء إدخال الاسم باللغة الإنجليزية فقط');
+            } else {
+                clearError(nameInput);
+            }
+
+            // Validate email
+            const emailInput = document.getElementById('id_email');
+            const emailValue = emailInput ? emailInput.value.trim() : '';
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!emailValue) {
+                isValid = false;
+                showError(emailInput, 'الرجاء إدخال البريد الإلكتروني');
+            } else if (!emailRegex.test(emailValue)) {
+                isValid = false;
+                showError(emailInput, 'الرجاء إدخال بريد إلكتروني صحيح');
+            } else {
+                clearError(emailInput);
+            }
+
+            if (!isValid) {
+                console.log('Form validation failed, preventing submission');
+                e.preventDefault();
+                // Add visual feedback
+                const submitButton = form.querySelector('.submit-button');
+                if (submitButton) {
+                    submitButton.style.background = 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)';
+                    setTimeout(() => {
+                        submitButton.style.background = 'linear-gradient(135deg, var(--edublink-color-primary) 0%, var(--edublink-color-primary-alt) 100%)';
+                    }, 1000);
+                }
+            } else {
+                console.log('Form validation passed, allowing submission');
+                // Show loading state but don't prevent submission
+                const submitButton = form.querySelector('.submit-button');
+                if (submitButton) {
+                    submitButton.disabled = true;
+                    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحميل...';
+                }
+            }
+        });
+
+        function showError(input, message) {
+            if (!input) return;
+            input.classList.add('error');
+            let errorDiv = input.parentElement.querySelector('.error-message');
+            if (!errorDiv) {
+                errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                input.parentElement.appendChild(errorDiv);
+            }
+            errorDiv.textContent = message;
+        }
+
+        function clearError(input) {
+            if (!input) return;
+            input.classList.remove('error');
+            const errorDiv = input.parentElement.querySelector('.error-message');
+            if (errorDiv) {
+                errorDiv.remove();
+            }
+        }
+    } else {
+        console.log('Registration form not found!');
+    }
+});
+</script>
+
+{% endblock %}

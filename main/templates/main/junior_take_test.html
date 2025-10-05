@@ -1,0 +1,610 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار ILFEN للناشئين - تقييم السمات الريادية</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans Arabic', 'Tajawal', sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .test-header {
+            background: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .progress-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .timer-box {
+            background: #ff9800;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .timer-box.warning {
+            background: #f44336;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .progress-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .progress-text {
+            font-size: 14px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .progress-bar-container {
+            width: 200px;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #4caf50 0%, #66bb6a 100%);
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .test-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .question-card.active {
+            display: block;
+        }
+
+        .question-header {
+            margin-bottom: 25px;
+        }
+
+        .question-number {
+            font-size: 13px;
+            color: #e91e63;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            font-weight: 500;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 18px 20px;
+            background: #f5f5f5;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-label:hover {
+            border-color: #e91e63;
+            background: #fff;
+        }
+
+        .option-label.selected {
+            border-color: #e91e63;
+            background: #fff5f7;
+        }
+
+        .option-radio {
+            display: none;
+        }
+
+        .option-text {
+            flex: 1;
+            font-size: 15px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            background: white;
+            padding: 25px 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-btn {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .prev-btn {
+            background: #f5f5f5;
+            color: #666;
+        }
+
+        .prev-btn:hover:not(:disabled) {
+            background: #e0e0e0;
+        }
+
+        .next-btn {
+            background: #e91e63;
+            color: white;
+        }
+
+        .next-btn:hover:not(:disabled) {
+            background: #d81b60;
+        }
+
+        .submit-btn {
+            background: #c0c0c0;
+            color: white;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .submit-btn:not(:disabled) {
+            background: #4caf50;
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .submit-btn:not(:disabled):hover {
+            background: #43a047;
+        }
+
+        .page-indicator {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Confirmation Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-icon {
+            width: 90px;
+            height: 90px;
+            background: #e91e63;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 50px;
+            color: white;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .modal-text {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-confirm {
+            background: #e91e63;
+            color: white;
+        }
+
+        .btn-cancel {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        .btn-confirm:hover {
+            background: #d81b60;
+        }
+
+        .btn-cancel:hover {
+            background: #d0d0d0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="test-header">
+        <div class="header-content">
+            <div class="logo-text">مقياس ILFEN للناشئين</div>
+            <div class="progress-section">
+                <div class="timer-box" id="timerBox">
+                    <span>متبقي</span>
+                    <span id="timer">6:00</span>
+                </div>
+                <div class="progress-info">
+                    <div class="progress-text" id="progressText">0 من {{ total_questions }}</div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Confirmation Modal -->
+    <div class="modal active" id="confirmModal">
+        <div class="modal-content">
+            <div class="modal-icon">
+                <i class="fas fa-rocket"></i>
+            </div>
+            <h2 class="modal-title">هل أنت جاهز لبدء الاختبار؟</h2>
+            <p class="modal-text">سيكون لديك 6 دقائق فقط لإكمال الاختبار. الأسئلة غير المجابة ستحصل على 0 نقطة.</p>
+            <div class="modal-buttons">
+                <button class="modal-btn btn-cancel" id="cancelBtn">إلغاء</button>
+                <button class="modal-btn btn-confirm" id="confirmBtn">ابدأ الآن</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Test Form -->
+    <form method="post" id="testForm">
+        {% csrf_token %}
+
+        <div class="test-container">
+            {% for question in questions %}
+            <div class="question-card" data-page="{{ forloop.counter0|divisibleby:5|add:1 }}" data-question-num="{{ forloop.counter }}">
+                <div class="question-header">
+                    <div class="question-number">سؤال {{ forloop.counter }} من {{ total_questions }}</div>
+                    <div class="question-text">{{ question.text }}</div>
+                </div>
+
+                <div class="options-grid">
+                    {% for value, text in answer_choices %}
+                    <label class="option-label" for="question_{{ question.id }}_{{ value }}">
+                        <input type="radio"
+                               class="option-radio"
+                               id="question_{{ question.id }}_{{ value }}"
+                               name="question_{{ question.id }}"
+                               value="{{ value }}"
+                               data-question-num="{{ forloop.parentloop.counter }}">
+                        <span class="option-text">{{ text }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+
+            <div class="navigation-buttons">
+                <button type="button" class="nav-btn prev-btn" id="prevBtn">
+                    <i class="fas fa-arrow-right"></i>
+                    السابق
+                </button>
+
+                <div class="page-indicator" id="pageIndicator">صفحة 1 من 4</div>
+
+                <button type="button" class="nav-btn next-btn" id="nextBtn">
+                    التالي
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+
+                <button type="submit" class="nav-btn submit-btn" id="submitBtn" disabled style="display: none;">
+                    إنهاء الاختبار
+                    <i class="fas fa-check"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <script>
+        const totalQuestions = {{ total_questions }};
+        const questionsPerPage = 5;
+        const totalPages = Math.ceil(totalQuestions / questionsPerPage);
+        let currentPage = 1;
+        let timeLeft = 6 * 60; // 6 minutes in seconds
+        let timerInterval = null;
+        let testStarted = false;
+        let answeredQuestions = new Set();
+
+        const confirmModal = document.getElementById('confirmModal');
+        const confirmBtn = document.getElementById('confirmBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const timerEl = document.getElementById('timer');
+        const timerBox = document.getElementById('timerBox');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const pageIndicator = document.getElementById('pageIndicator');
+        const testForm = document.getElementById('testForm');
+        const allQuestionCards = document.querySelectorAll('.question-card');
+
+        // Start test
+        confirmBtn.addEventListener('click', function() {
+            confirmModal.classList.remove('active');
+            testStarted = true;
+            startTimer();
+            showPage(1);
+        });
+
+        cancelBtn.addEventListener('click', function() {
+            window.location.href = "{% url 'home' %}";
+        });
+
+        // Timer countdown
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timerEl.textContent = '0:00';
+                    autoSubmitTest();
+                    return;
+                }
+
+                // Warning when less than 1 minute
+                if (timeLeft <= 60) {
+                    timerBox.classList.add('warning');
+                }
+
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerEl.textContent = `${minutes}:${String(seconds).padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        // Auto-submit when time is up
+        function autoSubmitTest() {
+            alert('انتهى الوقت! سيتم تقديم إجاباتك الآن.');
+            testForm.submit();
+        }
+
+        // Show specific page
+        function showPage(pageNum) {
+            currentPage = pageNum;
+
+            // Calculate question range for this page
+            const startQuestion = (pageNum - 1) * questionsPerPage + 1;
+            const endQuestion = Math.min(pageNum * questionsPerPage, totalQuestions);
+
+            // Hide all questions
+            allQuestionCards.forEach(card => {
+                card.classList.remove('active');
+            });
+
+            // Show questions for current page
+            allQuestionCards.forEach(card => {
+                const questionNum = parseInt(card.getAttribute('data-question-num'));
+                if (questionNum >= startQuestion && questionNum <= endQuestion) {
+                    card.classList.add('active');
+                }
+            });
+
+            // Update navigation buttons
+            prevBtn.style.display = pageNum === 1 ? 'none' : 'flex';
+
+            if (pageNum === totalPages) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'flex';
+            } else {
+                nextBtn.style.display = 'flex';
+                submitBtn.style.display = 'none';
+            }
+
+            // Update page indicator
+            pageIndicator.textContent = `صفحة ${pageNum} من ${totalPages}`;
+
+            // Scroll to top of the page smoothly
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Navigation
+        nextBtn.addEventListener('click', () => {
+            if (currentPage < totalPages) {
+                showPage(currentPage + 1);
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentPage > 1) {
+                showPage(currentPage - 1);
+            }
+        });
+
+        // Track answered questions
+        document.querySelectorAll('.option-radio').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const questionNum = this.getAttribute('data-question-num');
+                answeredQuestions.add(questionNum);
+
+                // Update visual selection
+                const container = this.closest('.options-grid');
+                container.querySelectorAll('.option-label').forEach(l => {
+                    l.classList.remove('selected');
+                });
+                this.closest('.option-label').classList.add('selected');
+
+                updateProgress();
+            });
+        });
+
+        // Click on label
+        document.querySelectorAll('.option-label').forEach(label => {
+            label.addEventListener('click', () => {
+                const radio = label.querySelector('.option-radio');
+                if (radio) {
+                    radio.checked = true;
+                    radio.dispatchEvent(new Event('change'));
+                }
+            });
+        });
+
+        // Update progress
+        function updateProgress() {
+            const count = answeredQuestions.size;
+            const percentage = (count / totalQuestions) * 100;
+
+            progressBar.style.width = percentage + '%';
+            progressText.textContent = `${count} من ${totalQuestions}`;
+
+            // Enable submit button only if all questions answered
+            submitBtn.disabled = count < totalQuestions;
+        }
+
+        // Submit confirmation
+        submitBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (confirm('هل أنت متأكد من إنهاء الاختبار؟ لن تتمكن من العودة بعد ذلك.')) {
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                }
+                testForm.submit();
+            }
+        });
+
+        // Initialize - check for already selected answers
+        document.querySelectorAll('.option-radio:checked').forEach(radio => {
+            const questionNum = radio.getAttribute('data-question-num');
+            answeredQuestions.add(questionNum);
+            radio.closest('.option-label').classList.add('selected');
+        });
+
+        // Prevent accidental page leave
+        window.addEventListener('beforeunload', function(e) {
+            if (testStarted && !testForm.submitted) {
+                e.preventDefault();
+                e.returnValue = 'سيتم فقدان تقدمك إذا غادرت هذه الصفحة. هل أنت متأكد؟';
+                return 'سيتم فقدان تقدمك إذا غادرت هذه الصفحة. هل أنت متأكد؟';
+            }
+        });
+
+        testForm.addEventListener('submit', function() {
+            testForm.submitted = true;
+        });
+
+        updateProgress();
+    </script>
+</body>
+</html>

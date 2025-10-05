@@ -1,0 +1,655 @@
+{% extends "director_base.html" %}
+{% load static %}
+
+{% block title %}إدارة سمات الناشئين - المدير{% endblock %}
+{% block page_title %}إدارة سمات الناشئين{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Enhanced Content Header */
+    .content-header {
+        margin-bottom: 36px;
+        padding-bottom: 24px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+
+    .page-title {
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .page-title::before {
+        content: '🌟';
+        font-size: 36px;
+    }
+
+    .breadcrumb {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        color: #666;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .breadcrumb a {
+        color: var(--primary-color);
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .breadcrumb a:hover {
+        color: var(--accent-color);
+    }
+
+    /* Enhanced Header Actions */
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #218c74 0%, #1a7560 100%);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: var(--transition);
+        box-shadow: 0 4px 12px rgba(33, 140, 116, 0.2);
+        margin-top:20px;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(33, 140, 116, 0.3);
+        color: white;
+    }
+
+    /* Enhanced Table */
+    .table-responsive {
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        margin-bottom: 32px;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        background: white;
+    }
+
+    .table thead th {
+        background: linear-gradient(135deg, #f0f8f5 0%, #e8f4f0 100%);
+        padding: 18px 20px;
+        text-align: right;
+        font-weight: 600;
+        color: #218c74;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 2px solid #e9ecef;
+        white-space: nowrap;
+        position: relative;
+    }
+
+    .table thead th::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #218c74, transparent);
+        opacity: 0.3;
+    }
+
+    .table tbody td {
+        padding: 16px 20px;
+        text-align: right;
+        border-bottom: 1px solid #f8f9fa;
+        color: #333;
+        font-size: 15px;
+        transition: var(--transition);
+        vertical-align: middle;
+    }
+
+    .table tbody tr {
+        transition: var(--transition);
+    }
+
+    .table tbody tr:hover {
+        background: linear-gradient(90deg, transparent, rgba(33, 140, 116, 0.03), transparent);
+        transform: scale(1.002);
+    }
+
+    .table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    /* Enhanced Badges */
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 12px;
+        font-size: 12px;
+        font-weight: 600;
+        border-radius: 20px;
+        gap: 6px;
+        transition: var(--transition);
+    }
+
+    .badge::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+    .badge-success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .badge-danger {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f1b0b7;
+    }
+
+    .badge-info {
+        background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+        color: white;
+        border: none;
+        box-shadow: 0 2px 4px rgba(23, 162, 184, 0.2);
+    }
+
+    .badge-secondary {
+        background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+        color: white;
+        border: none;
+        box-shadow: 0 2px 4px rgba(108, 117, 125, 0.2);
+    }
+
+    /* Enhanced Action Buttons */
+    .btn-group {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: var(--transition);
+        min-width: 40px;
+    }
+
+    .btn-warning {
+        background: linear-gradient(135deg, var(--warning-color) 0%, #e0a800 100%);
+        color: var(--text-dark);
+        box-shadow: 0 2px 8px rgba(255, 193, 7, 0.2);
+    }
+
+    .btn-danger {
+        background: linear-gradient(135deg, var(--danger-color) 0%, #c82333 100%);
+        color: white;
+        box-shadow: 0 2px 8px rgba(220, 53, 69, 0.2);
+    }
+
+    .btn-warning:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+        color: var(--text-dark);
+    }
+
+    .btn-danger:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+        color: white;
+    }
+
+    /* Order Badge Enhancement */
+    .order-badge {
+        background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 14px;
+        min-width: 40px;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(108, 117, 125, 0.2);
+    }
+
+    /* Weight Badge Enhancement */
+    .weight-badge {
+        background: linear-gradient(135deg, #218c74 0%, #1a7560 100%);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 14px;
+        min-width: 50px;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(33, 140, 116, 0.2);
+    }
+
+    /* Question Count Badge */
+    .question-badge {
+        background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+        color: var(--text-dark);
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 12px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        box-shadow: 0 2px 4px rgba(255, 193, 7, 0.2);
+    }
+
+    .question-badge::before {
+        content: '❓';
+        font-size: 10px;
+    }
+
+    /* Empty State Enhancement */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+    }
+
+    .empty-state-icon {
+        width: 120px;
+        height: 120px;
+        background: linear-gradient(135deg, #f0f8f5 0%, #e8f4f0 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 24px;
+        font-size: 48px;
+        color: #218c74;
+    }
+
+    .empty-state-title {
+        color: #218c74;
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .empty-state-text {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 24px;
+    }
+
+    /* Card Header Enhancement */
+    .card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        border: 1px solid #f0f0f0;
+        margin-bottom: 32px;
+        overflow: hidden;
+        transition: var(--transition);
+    }
+
+    .card:hover {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .card-header {
+        padding: 24px 28px;
+        border-bottom: 1px solid #f0f0f0;
+        background: linear-gradient(135deg, #f0f8f5 0%, #e8f4f0 100%);
+    }
+
+    .card-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #218c74;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    /* Junior Specific Styling */
+    .junior-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+        color: #856404;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-right: 10px;
+        border: 1px solid #ffeaa7;
+    }
+
+    .junior-indicator::before {
+        content: '🧒';
+        font-size: 10px;
+    }
+
+    /* Stats Summary */
+    .stats-summary {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .stat-item {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        border: 1px solid #f0f0f0;
+        text-align: center;
+        transition: var(--transition);
+    }
+
+    .stat-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .stat-number {
+        font-size: 24px;
+        font-weight: 700;
+        color: #218c74;
+        margin-bottom: 4px;
+    }
+
+    .stat-label {
+        color: #666;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    /* English Name Styling */
+    .english-name {
+        font-family: 'Courier New', monospace;
+        background: #f8f9fa;
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-size: 13px;
+        color: #495057;
+        border: 1px solid #e9ecef;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .table-responsive {
+            border-radius: 8px;
+        }
+
+        .table thead {
+            display: none;
+        }
+
+        .table tbody tr {
+            display: block;
+            margin-bottom: 16px;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 16px;
+            background: white;
+        }
+
+        .table tbody td {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f8f9fa;
+        }
+
+        .table tbody td:before {
+            content: attr(data-label);
+            font-weight: 600;
+            color: #218c74;
+            font-size: 13px;
+        }
+
+        .table tbody td:last-child {
+            border-bottom: none;
+            justify-content: center;
+            padding-top: 16px;
+        }
+
+        .btn-group {
+            justify-content: center;
+            width: 100%;
+        }
+
+        .stats-summary {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="page-title">
+                <span class="junior-indicator">ناشئين</span>
+                إدارة سمات الناشئين
+            </h1>
+            <div class="breadcrumb">
+                <a href="{% url 'director_dashboard' %}">الرئيسية</a>
+                <span>/</span>
+                <span>سمات الناشئين</span>
+            </div>
+        </div>
+        <div class="header-actions">
+            <a href="{% url 'junior_trait_create' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i>
+                إضافة سمة جديدة
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">قائمة سمات الناشئين</h3>
+    </div>
+    <div class="card-body">
+        {% if traits %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>الترتيب</th>
+                        <th>اسم السمة</th>
+                        <th>الاسم الإنجليزي</th>
+                        <th>الوزن</th>
+                        <th>عدد الأسئلة</th>
+                        <th>الحالة</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for trait in traits %}
+                    <tr>
+                        <td data-label="الترتيب">
+                            <span class="order-badge">{{ trait.order }}</span>
+                        </td>
+                        <td data-label="اسم السمة">
+                            <div class="d-flex align-items-start gap-3">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-star text-warning"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <strong>{{ trait.name }}</strong>
+                                    {% if trait.description %}
+                                    <div class="mt-1">
+                                        <small class="text-muted">{{ trait.description|truncatewords:8 }}</small>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </td>
+                        <td data-label="الاسم الإنجليزي">
+                            {% if trait.name_en %}
+                            <span class="english-name">{{ trait.name_en }}</span>
+                            {% else %}
+                            <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td data-label="الوزن">
+                            <span class="weight-badge">{{ trait.weight }}</span>
+                        </td>
+                        <td data-label="عدد الأسئلة">
+                            <span class="question-badge">{{ trait.question_count }}</span>
+                        </td>
+                        <td data-label="الحالة">
+                            {% if trait.is_active %}
+                            <span class="badge badge-success">
+                                <i class="fas fa-check"></i>
+                                نشط
+                            </span>
+                            {% else %}
+                            <span class="badge badge-danger">
+                                <i class="fas fa-times"></i>
+                                غير نشط
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td data-label="الإجراءات">
+                            <div class="btn-group">
+                                <a href="{% url 'junior_trait_edit' trait.pk %}" class="btn btn-warning" title="تعديل السمة">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{% url 'junior_trait_delete' trait.pk %}" class="btn btn-danger" title="حذف السمة">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <i class="fas fa-star-half-alt"></i>
+            </div>
+            <h5 class="empty-state-title">لا توجد سمات مضافة للناشئين</h5>
+            <p class="empty-state-text">ابدأ بإضافة أول سمة لتقييم السمات الريادية للناشئين</p>
+            <a href="{% url 'junior_trait_create' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i>
+                إضافة أول سمة
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add mobile responsive labels
+        const tableHeaders = document.querySelectorAll('.table thead th');
+        const tableCells = document.querySelectorAll('.table tbody td');
+
+        tableCells.forEach((cell, index) => {
+            const headerIndex = index % tableHeaders.length;
+            const headerText = tableHeaders[headerIndex].textContent;
+            cell.setAttribute('data-label', headerText);
+        });
+
+        // Add confirmation for delete actions
+        const deleteButtons = document.querySelectorAll('.btn-danger');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                if (!confirm('هل أنت متأكد من حذف هذه السمة؟ لا يمكن التراجع عن هذا الإجراء.')) {
+                    e.preventDefault();
+                }
+            });
+        });
+
+        // Add weight color coding
+        const weightBadges = document.querySelectorAll('.weight-badge');
+        weightBadges.forEach(badge => {
+            const weight = parseInt(badge.textContent);
+            if (weight >= 80) {
+                badge.style.background = 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)';
+            } else if (weight >= 60) {
+                badge.style.background = 'linear-gradient(135deg, #fd7e14 0%, #e55a00 100%)';
+            } else if (weight >= 40) {
+                badge.style.background = 'linear-gradient(135deg, #ffc107 0%, #e0a800 100%)';
+            } else if (weight >= 20) {
+                badge.style.background = 'linear-gradient(135deg, #28a745 0%, #218838 100%)';
+            } else {
+                badge.style.background = 'linear-gradient(135deg, #17a2b8 0%, #138496 100%)';
+            }
+        });
+
+        // Add question count color coding
+        const questionBadges = document.querySelectorAll('.question-badge');
+        questionBadges.forEach(badge => {
+            const count = parseInt(badge.textContent);
+            if (count === 0) {
+                badge.style.background = 'linear-gradient(135deg, #6c757d 0%, #5a6268 100%)';
+                badge.style.color = 'white';
+            } else if (count <= 3) {
+                badge.style.background = 'linear-gradient(135deg, #ffc107 0%, #e0a800 100%)';
+                badge.style.color = 'var(--text-dark)';
+            } else if (count <= 6) {
+                badge.style.background = 'linear-gradient(135deg, #fd7e14 0%, #e55a00 100%)';
+                badge.style.color = 'white';
+            } else {
+                badge.style.background = 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)';
+                badge.style.color = 'white';
+            }
+        });
+
+        // Add order color coding
+        const orderBadges = document.querySelectorAll('.order-badge');
+        orderBadges.forEach(badge => {
+            const order = parseInt(badge.textContent);
+            if (order <= 3) {
+                badge.style.background = 'linear-gradient(135deg, #28a745 0%, #218838 100%)';
+            } else if (order <= 6) {
+                badge.style.background = 'linear-gradient(135deg, #ffc107 0%, #e0a800 100%)';
+            } else if (order <= 9) {
+                badge.style.background = 'linear-gradient(135deg, #fd7e14 0%, #e55a00 100%)';
+            } else {
+                badge.style.background = 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)';
+            }
+        });
+    });
+</script>
+{% endblock %}

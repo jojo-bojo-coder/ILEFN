@@ -1,0 +1,628 @@
+{% extends "director_base.html" %}
+{% load static %}
+
+{% block title %}إدارة السمات - المدير{% endblock %}
+{% block page_title %}إدارة السمات{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Enhanced Content Header */
+    .content-header {
+        margin-bottom: 36px;
+        padding-bottom: 24px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+
+    .page-title {
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .page-title::before {
+        content: '⭐';
+        font-size: 36px;
+    }
+
+    .breadcrumb {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        color: #666;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .breadcrumb a {
+        color: var(--primary-color);
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .breadcrumb a:hover {
+        color: var(--accent-color);
+    }
+
+    /* Enhanced Header Actions */
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: var(--transition);
+        box-shadow: 0 4px 12px rgba(42, 95, 115, 0.2);
+        margin-top:20px;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(42, 95, 115, 0.3);
+        color: white;
+
+    }
+
+    /* Enhanced Table */
+    .table-responsive {
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        margin-bottom: 32px;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        background: white;
+    }
+
+    .table thead th {
+        background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+        padding: 18px 20px;
+        text-align: right;
+        font-weight: 600;
+        color: var(--primary-color);
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 2px solid #e9ecef;
+        white-space: nowrap;
+        position: relative;
+    }
+
+    .table thead th::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+        opacity: 0.3;
+    }
+
+    .table tbody td {
+        padding: 16px 20px;
+        text-align: right;
+        border-bottom: 1px solid #f8f9fa;
+        color: #333;
+        font-size: 15px;
+        transition: var(--transition);
+        vertical-align: middle;
+    }
+
+    .table tbody tr {
+        transition: var(--transition);
+    }
+
+    .table tbody tr:hover {
+        background: linear-gradient(90deg, transparent, rgba(42, 95, 115, 0.03), transparent);
+        transform: scale(1.002);
+    }
+
+    .table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    /* Enhanced Badges */
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 12px;
+        font-size: 12px;
+        font-weight: 600;
+        border-radius: 20px;
+        gap: 6px;
+        transition: var(--transition);
+    }
+
+    .badge::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+    .badge-success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .badge-danger {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f1b0b7;
+    }
+
+    .badge-warning {
+        background: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeaa7;
+    }
+
+    .badge-secondary {
+        background: #e9ecef;
+        color: #495057;
+        border: 1px solid #dee2e6;
+    }
+
+    .badge-info {
+        background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+        color: white;
+        border: none;
+        box-shadow: 0 2px 4px rgba(23, 162, 184, 0.2);
+    }
+
+    /* Enhanced Action Buttons */
+    .btn-group {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: var(--transition);
+        min-width: 40px;
+    }
+
+    .btn-warning {
+        background: linear-gradient(135deg, var(--warning-color) 0%, #e0a800 100%);
+        color: var(--text-dark);
+        box-shadow: 0 2px 8px rgba(255, 193, 7, 0.2);
+    }
+
+    .btn-danger {
+        background: linear-gradient(135deg, var(--danger-color) 0%, #c82333 100%);
+        color: white;
+        box-shadow: 0 2px 8px rgba(220, 53, 69, 0.2);
+    }
+
+    .btn-warning:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+        color: var(--text-dark);
+    }
+
+    .btn-danger:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+        color: white;
+    }
+
+    /* Enhanced Summary Cards */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        margin: 32px 0;
+    }
+
+    .stat-card {
+        background: white;
+        padding: 24px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        border: 1px solid #f0f0f0;
+        transition: var(--transition);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    }
+
+    .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .stat-content {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .stat-icon {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 20px;
+    }
+
+    .stat-details {
+        flex: 1;
+    }
+
+    .stat-number {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 4px;
+        line-height: 1;
+    }
+
+    .stat-label {
+        color: #666;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    /* Tips Card */
+    .tips-card {
+        background: linear-gradient(135deg, #fff9db 0%, #fff3cd 100%);
+        border: 1px solid #ffeaa7;
+        border-radius: 12px;
+        padding: 24px;
+        margin-top: 24px;
+    }
+
+    .tips-card h6 {
+        color: #856404;
+        font-weight: 600;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .tips-card h6::before {
+        content: '💡';
+        font-size: 18px;
+    }
+
+    .tips-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .tips-list li {
+        padding: 8px 0;
+        color: #856404;
+        font-size: 14px;
+        position: relative;
+        padding-right: 20px;
+    }
+
+    .tips-list li::before {
+        content: '•';
+        position: absolute;
+        right: 0;
+        color: var(--primary-color);
+        font-weight: bold;
+    }
+
+    /* Empty State Enhancement */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+    }
+
+    .empty-state-icon {
+        width: 120px;
+        height: 120px;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 24px;
+        font-size: 48px;
+        color: #6c757d;
+    }
+
+    .empty-state-title {
+        color: #6c757d;
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .empty-state-text {
+        color: #6c757d;
+        font-size: 14px;
+        margin-bottom: 24px;
+    }
+
+    /* Card Header Enhancement */
+    .card-header {
+        background: linear-gradient(135deg, #fafafa 0%, #f8f9fa 100%);
+        border-bottom: 1px solid #e9ecef;
+        padding: 24px 28px;
+    }
+
+    .card-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+
+    .card-subtitle {
+        font-size: 14px;
+        color: #666;
+        margin-top: 4px;
+        font-weight: 500;
+    }
+
+    /* Code Styling for English Names */
+    code {
+        background: #f8f9fa;
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-family: 'Courier New', monospace;
+        font-size: 13px;
+        color: var(--primary-color);
+        border: 1px solid #e9ecef;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .table-responsive {
+            border-radius: 8px;
+        }
+
+        .table thead {
+            display: none;
+        }
+
+        .table tbody tr {
+            display: block;
+            margin-bottom: 16px;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 16px;
+            background: white;
+        }
+
+        .table tbody td {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f8f9fa;
+        }
+
+        .table tbody td:before {
+            content: attr(data-label);
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 13px;
+        }
+
+        .table tbody td:last-child {
+            border-bottom: none;
+            justify-content: center;
+            padding-top: 16px;
+        }
+
+        .btn-group {
+            justify-content: center;
+            width: 100%;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="page-title">السمات الريادية</h1>
+            <div class="breadcrumb">
+                <a href="{% url 'director_dashboard' %}">الرئيسية</a>
+                <span>/</span>
+                <span>السمات</span>
+            </div>
+        </div>
+        <div class="header-actions">
+            <a href="{% url 'trait_create' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i>
+                إضافة سمة جديدة
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">قائمة السمات</h3>
+        <p class="card-subtitle">إدارة السمات الريادية المستخدمة في تقييم الاختبار</p>
+    </div>
+    <div class="card-body">
+        {% if traits %}
+        <!-- Traits Table -->
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>اسم السمة</th>
+                        <th>الاسم (إنجليزي)</th>
+                        <th>الوزن</th>
+                        <th>الترتيب</th>
+                        <th>عدد الأسئلة</th>
+                        <th>الحالة</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for trait in traits %}
+                    <tr>
+                        <td data-label="#">{{ forloop.counter }}</td>
+                        <td data-label="اسم السمة">
+                            <div>
+                                <strong>{{ trait.name }}</strong>
+                                {% if trait.description %}
+                                <br>
+                                <small class="text-muted">{{ trait.description|truncatewords:8 }}</small>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td data-label="الاسم (إنجليزي)">
+                            <code>{{ trait.name_en|default:"-" }}</code>
+                        </td>
+                        <td data-label="الوزن">
+                            <span class="badge badge-info">{{ trait.weight }}</span>
+                        </td>
+                        <td data-label="الترتيب">{{ trait.order }}</td>
+                        <td data-label="عدد الأسئلة">
+                            <span class="badge badge-secondary">{{ trait.question_count }}</span>
+                        </td>
+                        <td data-label="الحالة">
+                            {% if trait.is_active %}
+                            <span class="badge badge-success">نشط</span>
+                            {% else %}
+                            <span class="badge badge-danger">غير نشط</span>
+                            {% endif %}
+                        </td>
+                        <td data-label="الإجراءات">
+                            <div class="btn-group">
+                                <a href="{% url 'trait_edit' trait.pk %}" class="btn btn-warning" title="تعديل السمة">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{% url 'trait_delete' trait.pk %}" class="btn btn-danger" title="حذف السمة">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Tips Card -->
+        <div class="tips-card">
+            <h6>نصائح لإدارة السمات</h6>
+            <ul class="tips-list">
+                <li>الوزن يحدد أهمية السمة في النتيجة النهائية للاختبار</li>
+                <li>الترتيب يحدد تسلسل ظهور الأسئلة المرتبطة بالسمة</li>
+                <li>لا يمكن حذف السمات المرتبطة بأسئلة موجودة في النظام</li>
+                <li>الوزن المثالي يتراوح بين 1-100 للحصول على نتائج متوازنة</li>
+                <li>تأكد من تنشيط السمات التي تريد استخدامها في الاختبارات الحالية</li>
+            </ul>
+        </div>
+
+        {% else %}
+        <!-- Empty State -->
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <i class="fas fa-star"></i>
+            </div>
+            <h5 class="empty-state-title">لا توجد سمات مضافة</h5>
+            <p class="empty-state-text">ابدأ بإضافة أول سمة لتقييم السمات الريادية للمستخدمين</p>
+            <a href="{% url 'trait_create' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i>
+                إضافة أول سمة
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add mobile responsive labels
+        const tableHeaders = document.querySelectorAll('.table thead th');
+        const tableCells = document.querySelectorAll('.table tbody td');
+
+        tableCells.forEach((cell, index) => {
+            const headerIndex = index % tableHeaders.length;
+            const headerText = tableHeaders[headerIndex].textContent;
+            cell.setAttribute('data-label', headerText);
+        });
+
+        // Add confirmation for delete actions
+        const deleteButtons = document.querySelectorAll('.btn-danger');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                if (!confirm('هل أنت متأكد من حذف هذه السمة؟ لا يمكن التراجع عن هذا الإجراء.')) {
+                    e.preventDefault();
+                }
+            });
+        });
+
+        // Add weight validation tips
+        const weightBadges = document.querySelectorAll('.badge-info');
+        weightBadges.forEach(badge => {
+            const weight = parseInt(badge.textContent);
+            if (weight > 100) {
+                badge.style.background = 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)';
+                badge.title = 'الوزن مرتفع جداً - الوزن الموصى به بين 1-100';
+            } else if (weight < 1) {
+                badge.style.background = 'linear-gradient(135deg, #ffc107 0%, #e0a800 100%)';
+                badge.title = 'الوزن منخفض جداً - الوزن الموصى به بين 1-100';
+            }
+        });
+    });
+</script>
+{% endblock %}

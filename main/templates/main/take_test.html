@@ -1,0 +1,657 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_filters %}
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block body_class %}test-page page-template-default page wp-embed-responsive edublink-page-content theme-name-edublink{% endblock %}
+
+{% block content %}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        direction: rtl;
+        background: #f0f2f5;
+    }
+
+    /* Test Page Styles */
+    .test-page {
+        background: #f0f2f5;
+        min-height: 100vh;
+        padding: 0;
+    }
+
+    .test-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+
+    /* Header Section - Sticky */
+    .test-header {
+        background: white;
+        padding: 20px 40px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        position: sticky;
+        top: 20px;
+        z-index: 100;
+    }
+
+    .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .test-info {
+        flex: 1;
+        text-align: right;
+    }
+
+    .test-title {
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        color: #1e5a6d;
+    }
+
+    .progress-text {
+        font-size: 16px;
+        color: #666;
+    }
+
+    .progress-text span {
+        font-weight: 600;
+        color: #1e5a6d;
+    }
+
+    .timer-badge {
+        background: #2d7a8f;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    /* Progress Bar */
+    .progress-section {
+        height: 6px;
+        background: #e0e0e0;
+        border-radius: 10px;
+        margin-top: 15px;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        background: #76c043;
+        height: 100%;
+        width: 2%;
+        border-radius: 10px;
+        transition: width 0.3s ease;
+    }
+
+    /* Questions Container */
+    .questions-wrapper {
+        background: white;
+        border-radius: 12px;
+        padding: 40px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        min-height: 500px;
+    }
+
+    .question-page {
+        display: none;
+    }
+
+    .question-page.active {
+        display: block;
+    }
+
+    .question-card {
+        margin-bottom: 40px;
+    }
+
+    .question-card:last-child {
+        margin-bottom: 0;
+    }
+
+    .question-text {
+        font-size: 18px;
+        color: #333;
+        line-height: 1.8;
+        text-align: right;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    /* Answer Options */
+    .answer-options {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .answer-option {
+        position: relative;
+    }
+
+    .answer-option input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        width: 0;
+        height: 0;
+    }
+
+    .answer-label {
+        display: block;
+        padding: 14px 24px;
+        background: #f5f7f9;
+        border: 2px solid #e8ecef;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 16px;
+        color: #555;
+        text-align: right;
+        font-weight: 400;
+    }
+
+    .answer-option input[type="radio"]:checked + .answer-label {
+        background: #2d7a8f;
+        color: white;
+        border-color: #2d7a8f;
+        font-weight: 500;
+    }
+
+    .answer-label:hover {
+        border-color: #2d7a8f;
+        background: #e8f4f8;
+    }
+
+    .answer-option input[type="radio"]:checked + .answer-label:hover {
+        background: #256d80;
+    }
+
+    /* Navigation Buttons */
+    .navigation-section {
+        margin-top: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .nav-button {
+        background: #d4a056;
+        color: white;
+        padding: 12px 35px;
+        font-size: 16px;
+        font-weight: 600;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .nav-button:hover {
+        background: #c49048;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(212, 160, 86, 0.3);
+    }
+
+    .nav-button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .nav-button i {
+        font-size: 14px;
+    }
+
+    /* Submit Button */
+    .submit-button {
+        background: #4caf50;
+        color: white;
+        padding: 12px 40px;
+        font-size: 16px;
+        font-weight: 600;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: none;
+    }
+
+    .submit-button.show {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .submit-button:hover {
+        background: #45a049;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+    }
+
+    .submit-button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    /* Confirmation Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+    }
+
+    .modal.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-content {
+        background: white;
+        border-radius: 12px;
+        padding: 40px;
+        max-width: 500px;
+        width: 90%;
+        text-align: center;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-icon {
+        width: 80px;
+        height: 80px;
+        background: #2d7a8f;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 25px;
+        font-size: 40px;
+        color: white;
+    }
+
+    .modal-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: #2d7a8f;
+        margin-bottom: 15px;
+    }
+
+    .modal-text {
+        font-size: 16px;
+        color: #666;
+        margin-bottom: 30px;
+        line-height: 1.6;
+    }
+
+    .modal-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+    }
+
+    .modal-btn {
+        padding: 12px 30px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s ease;
+    }
+
+    .btn-confirm {
+        background: #d4a056;
+        color: white;
+    }
+
+    .btn-cancel {
+        background: #e0e0e0;
+        color: #666;
+    }
+
+    .btn-confirm:hover {
+        background: #c49048;
+    }
+
+    .btn-cancel:hover {
+        background: #d0d0d0;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .test-container {
+            padding: 20px 15px;
+        }
+
+        .test-header {
+            padding: 15px 20px;
+            top: 10px;
+        }
+
+        .header-content {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .timer-badge {
+            align-self: flex-start;
+        }
+
+        .test-title {
+            font-size: 18px;
+        }
+
+        .questions-wrapper {
+            padding: 25px 20px;
+        }
+
+        .question-text {
+            font-size: 16px;
+        }
+
+        .answer-label {
+            padding: 12px 16px;
+            font-size: 15px;
+        }
+
+        .navigation-section {
+            flex-direction: column-reverse;
+        }
+
+        .nav-button, .submit-button {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .modal-content {
+            margin: 20px;
+            padding: 30px 25px;
+        }
+    }
+</style>
+
+<section class="test-page">
+    <div class="test-container">
+        <!-- Test Header - Sticky -->
+        <div class="test-header">
+            <div class="header-content">
+                <div class="test-info">
+                    <h1 class="test-title">تقييم السمات الريادية</h1>
+                    <div class="progress-text">
+                        <span id="answeredCount">0</span> من {{ total_questions }}
+                    </div>
+                </div>
+                <div class="timer-badge">
+                    متبقي
+                    <span id="timerValue">11:00</span>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-section">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+        </div>
+
+        <!-- Questions Form -->
+        <form method="post" id="testForm">
+            {% csrf_token %}
+
+            <div class="questions-wrapper">
+                {% for page_num in "12345678910"|make_list %}
+                <div class="question-page {% if forloop.first %}active{% endif %}" data-page="{{ forloop.counter }}">
+                    {% for question in questions %}
+                        {% with start_index=forloop.parentloop.counter0|add:"0"|multiply:"5" %}
+                        {% with end_index=start_index|add:"5" %}
+                        {% if forloop.counter0 >= start_index and forloop.counter0 < end_index %}
+                    <div class="question-card" data-question-id="{{ question.id }}">
+                        <div class="question-text">{{ forloop.counter }}. {{ question.text }}</div>
+
+                        <div class="answer-options">
+                            {% for value, label in answer_choices %}
+                            <div class="answer-option">
+                                <input
+                                    type="radio"
+                                    id="q{{ question.id }}_a{{ forloop.counter }}"
+                                    name="question_{{ question.id }}"
+                                    value="{{ value }}"
+                                    {% if current_answers|get_item:question.id|stringformat:"s" == value|stringformat:"s" %}checked{% endif %}
+                                >
+                                <label class="answer-label" for="q{{ question.id }}_a{{ forloop.counter }}">
+                                    {{ label }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                        {% endif %}
+                        {% endwith %}
+                        {% endwith %}
+                    {% endfor %}
+
+                    <!-- Navigation Section -->
+                    <div class="navigation-section">
+                        <button type="button" class="nav-button prev-btn" {% if forloop.first %}style="display: none;"{% endif %}>
+                            <i class="fas fa-chevron-right"></i>
+                            السابق
+                        </button>
+                        <button type="button" class="nav-button next-btn" {% if forloop.last %}style="display: none;"{% endif %}>
+                            التالي
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button type="button" class="submit-button" {% if forloop.last %}style="display: inline-flex;"{% endif %}>
+                            <i class="fas fa-flag-checkered"></i>
+                            إنهاء المقياس
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- Confirmation Modal -->
+<div class="modal" id="confirmModal">
+    <div class="modal-content">
+        <div class="modal-icon">
+            <i class="fas fa-question"></i>
+        </div>
+        <h2 class="modal-title">هل أنت جاهز لبدء المقياس؟</h2>
+        <p class="modal-text">سيكون لديك 11 دقيقة فقط لإكمال المقياس. الأسئلة غير المجابة ستحصل على 0 نقطة.</p>
+        <div class="modal-buttons">
+            <button class="modal-btn btn-cancel" id="cancelBtn">إلغاء</button>
+            <button class="modal-btn btn-confirm" id="confirmBtn">ابدأ الآن</button>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('testForm');
+    const submitBtns = document.querySelectorAll('.submit-button');
+    const nextBtns = document.querySelectorAll('.next-btn');
+    const prevBtns = document.querySelectorAll('.prev-btn');
+    const progressBar = document.getElementById('progressBar');
+    const answeredCountEl = document.getElementById('answeredCount');
+    const totalQuestions = {{ total_questions }};
+    const radioButtons = document.querySelectorAll('input[type="radio"]');
+    const timerEl = document.getElementById('timerValue');
+    const confirmModal = document.getElementById('confirmModal');
+    const confirmBtn = document.getElementById('confirmBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const questionPages = document.querySelectorAll('.question-page');
+
+    let currentPage = 1;
+    const totalPages = questionPages.length;
+    let startTime = null;
+    let timerInterval = null;
+    let timeLeft = 11 * 60; // 11 minutes in seconds
+    let testStarted = false;
+
+    // Show confirmation modal on page load
+    setTimeout(() => {
+        confirmModal.classList.add('active');
+    }, 500);
+
+    // Start test
+    confirmBtn.addEventListener('click', function() {
+        confirmModal.classList.remove('active');
+        testStarted = true;
+        startTime = Date.now();
+        startTimer();
+    });
+
+    cancelBtn.addEventListener('click', function() {
+        window.location.href = "{% url 'home' %}";
+    });
+
+    // Timer function
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            timeLeft--;
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                timerEl.textContent = '00:00';
+                autoSubmitTest();
+                return;
+            }
+
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerEl.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }, 1000);
+    }
+
+    // Auto-submit when time is up
+    function autoSubmitTest() {
+        alert('انتهى الوقت! سيتم تقديم إجاباتك الآن.');
+        form.submit();
+    }
+
+    // Pagination
+    function showPage(pageNum) {
+        questionPages.forEach((page, index) => {
+            page.classList.remove('active');
+            if (index + 1 === pageNum) {
+                page.classList.add('active');
+            }
+        });
+
+        currentPage = pageNum;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    nextBtns.forEach((btn, index) => {
+        btn.addEventListener('click', function() {
+            if (currentPage < totalPages) {
+                showPage(currentPage + 1);
+            }
+        });
+    });
+
+    prevBtns.forEach((btn, index) => {
+        btn.addEventListener('click', function() {
+            if (currentPage > 1) {
+                showPage(currentPage - 1);
+            }
+        });
+    });
+
+    // Update progress
+    function updateProgress() {
+        const answeredQuestions = new Set();
+        radioButtons.forEach(radio => {
+            if (radio.checked) {
+                const questionId = radio.name;
+                answeredQuestions.add(questionId);
+            }
+        });
+
+        const count = answeredQuestions.size;
+        const percentage = (count / totalQuestions) * 100;
+
+        progressBar.style.width = percentage + '%';
+        answeredCountEl.textContent = count;
+
+        // Enable/disable submit buttons
+        submitBtns.forEach(btn => {
+            if (count >= totalQuestions) {
+                btn.disabled = false;
+            } else {
+                btn.disabled = true;
+            }
+        });
+    }
+
+    // Listen to answer changes
+    radioButtons.forEach(radio => {
+        radio.addEventListener('change', updateProgress);
+    });
+
+    // Initial progress update
+    updateProgress();
+
+    // Submit confirmation
+    submitBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (confirm('هل أنت متأكد من إنهاء المقياس؟ لن تتمكن من العودة بعد ذلك.')) {
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                }
+                form.submit();
+            }
+        });
+    });
+
+    // Prevent accidental page leave
+    window.addEventListener('beforeunload', function(e) {
+        if (testStarted && !form.submitted) {
+            e.preventDefault();
+            e.returnValue = 'سيتم فقدان تقدمك إذا غادرت هذه الصفحة. هل أنت متأكد؟';
+            return 'سيتم فقدان تقدمك إذا غادرت هذه الصفحة. هل أنت متأكد؟';
+        }
+    });
+
+    form.addEventListener('submit', function() {
+        form.submitted = true;
+    });
+});
+</script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+{% endblock %}

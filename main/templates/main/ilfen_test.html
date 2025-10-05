@@ -1,0 +1,652 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block body_class %}ilfen-test page-template-default page page-id-test wp-embed-responsive edublink-page-content edublink-page-breadcrumb-disable edublink-page-boxed edublink-page-sidebar-disable theme-name-edublink elementor-default elementor-kit-8 elementor-page elementor-page-test{% endblock %}
+
+{% block content %}
+<style>
+    /* Test Portal Section - Exact Match to Photo Design */
+.test-portal-section {
+    background: white;
+    padding: 80px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.test-container {
+    background: linear-gradient(135deg, #2A5F73 0%, #1E4A5C 100%);
+    border-radius: 25px;
+    padding: 0;
+    max-width: 1100px;
+    width: 90%;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    position: relative;
+    min-height: 300px;
+}
+
+/* Left side - Button area */
+.test-button-side {
+    flex: 0 0 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+.test-button {
+    background: white;
+    color: #2A5F73;
+    padding: 16px 40px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: none;
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.test-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(42, 95, 115, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.test-button:hover::before {
+    left: 100%;
+}
+
+.test-button:hover {
+    background: #f0f8ff;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(255, 255, 255, 0.3);
+}
+
+.test-button i {
+    font-size: 18px;
+}
+
+/* Right side - Content area */
+.test-content {
+    flex: 1;
+    padding: 40px 60px 40px 20px;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+}
+
+.test-portal-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+.test-portal-description {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 0;
+    line-height: 1.6;
+}
+
+/* Add decorative squares like the photo */
+.test-container::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    z-index: 1;
+}
+
+.test-container::after {
+    content: '';
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    z-index: 1;
+}
+
+/* Additional decorative elements */
+.test-container {
+    background:
+        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 50%),
+        linear-gradient(135deg, #2A5F73 0%, #1E4A5C 100%);
+}
+
+/* Responsive Design for Test Portal */
+@media (max-width: 768px) {
+    .test-portal-section {
+        padding: 60px 0;
+    }
+
+    .test-container {
+        width: 95%;
+        border-radius: 20px;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .test-button-side {
+        flex: none;
+        order: 2;
+        padding: 20px;
+    }
+
+    .test-content {
+        flex: none;
+        order: 1;
+        padding: 30px;
+        text-align: center;
+    }
+
+    .test-portal-title {
+        font-size: 24px;
+    }
+
+    .test-portal-description {
+        font-size: 14px;
+        margin-bottom: 0;
+    }
+
+    .test-button {
+        padding: 14px 30px;
+        font-size: 15px;
+    }
+}
+    /* ILFEN Test Page Styles */
+    .ilfen-test-hero {
+        background:
+                   url('{% static "images/iilbanner.webp" %}') center/cover no-repeat;
+        background-attachment: fixed;
+        min-height: 550px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        padding: 70px 0 60px;
+        margin-bottom: -80px;
+    }
+
+    .ilfen-test-hero::before {
+        content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+    90deg,
+    rgba(21, 99, 126, 0.9) 0%,
+    rgba(21, 99, 126, 0.6) 30%,
+    rgba(21, 99, 126, 0.3) 50%,
+    transparent 70%
+);
+    z-index: 1;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        color: white;
+        max-width: 100%;
+        width: 100%;
+        margin: 0 20px;
+    }
+
+    .hero-title {
+        font-size: 24px;
+        font-weight: 500;
+        margin-bottom: 25px;
+        line-height: 1.5;
+        color: #D4AF37;
+        text-shadow: none;
+    }
+
+    .hero-subtitle {
+        font-size: 56px;
+        font-weight: 700;
+        margin-bottom: 35px;
+        line-height: 1.3;
+        color: white;
+        text-shadow: none;
+    }
+
+    .hero-subtitle .highlight {
+        color: white;
+        text-shadow: none;
+    }
+
+    .hero-description {
+        font-size: 17px;
+        line-height: 1.8;
+        margin-bottom: 35px;
+        color: rgba(255,255,255,0.95);
+        max-width: 950px;
+        margin-left: auto;
+        margin-right: auto;
+        text-shadow: none;
+    }
+
+    .hero-button {
+        background: white;
+        color: #1A3C4B;
+        padding: 16px 45px;
+        font-size: 18px;
+        font-weight: 600;
+        border: none;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s ease;
+        box-shadow: none;
+        text-shadow: none;
+    }
+
+    .hero-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        background: #f5f5f5;
+        color: #1A3C4B;
+        text-decoration: none;
+    }
+
+    .hero-button i {
+        transition: transform 0.3s ease;
+    }
+
+    .hero-button:hover i {
+        transform: translateX(-3px);
+    }
+
+    /* Features Section */
+    .features-section {
+        background: white;
+        padding: 80px 0;
+        position: relative;
+    }
+
+    .features-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 40px;
+
+    }
+
+    .feature-card {
+        background: white;
+        border-radius: 20px;
+        padding: 40px 30px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(21,99,126,0.1);
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    }
+
+    .feature-card::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(135deg, var(--edublink-color-primary) 0%, var(--edublink-color-secondary) 100%);
+        border-radius: 20px;
+        opacity: 0;
+        z-index: -1;
+        transition: opacity 0.3s ease;
+    }
+
+    .feature-card:hover::before {
+        opacity: 0.1;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(21,99,126,0.15);
+    }
+
+    .feature-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, var(--edublink-color-primary) 0%, var(--edublink-color-primary-alt) 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: all 0.3s ease;
+    }
+
+    .feature-text {
+        flex: 1;
+    }
+
+    .feature-card:hover .feature-icon {
+        transform: scale(1.1);
+        background: linear-gradient(135deg, var(--edublink-color-secondary) 0%, #d4a960 100%);
+    }
+
+    .feature-icon i {
+        font-size: 24px;
+        color: white;
+    }
+
+    .feature-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--edublink-color-heading);
+        margin-bottom: 15px;
+        line-height: 1.3;
+    }
+
+    .feature-description {
+        font-size: 16px;
+        line-height: 1.6;
+        color: var(--edublink-color-body);
+        margin: 0;
+    }
+
+    /* CTA Section */
+    .cta-section {
+        background: var(--edublink-gradient-primary);
+        padding: 100px 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cta-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background:
+            radial-gradient(circle at 20% 80%, rgba(184,147,78,0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%);
+        z-index: 1;
+    }
+
+    .cta-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        color: white;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .cta-title {
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        line-height: 1.3;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .cta-description {
+        font-size: 18px;
+        line-height: 1.7;
+        margin-bottom: 40px;
+        color: rgba(255,255,255,0.9);
+        text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+
+    .cta-button {
+        background: white;
+        color: var(--edublink-color-primary);
+        padding: 18px 40px;
+        font-size: 18px;
+        font-weight: 600;
+        border: none;
+        border-radius: 50px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .cta-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 35px rgba(0,0,0,0.2);
+        background: #f8f9fa;
+        color: var(--edublink-color-primary);
+        text-decoration: none;
+    }
+
+    .cta-button i {
+        transition: transform 0.3s ease;
+    }
+
+    .cta-button:hover i {
+        transform: translateX(-3px);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+        .features-container {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        .hero-title {
+            font-size: 38px;
+        }
+
+        .hero-subtitle {
+            font-size: 28px;
+        }
+
+        .cta-title {
+            font-size: 28px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .features-container {
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        .hero-title {
+            font-size: 28px;
+        }
+
+        .hero-subtitle {
+            font-size: 24px;
+        }
+
+        .hero-description,
+        .cta-description {
+            font-size: 16px;
+        }
+
+        .cta-title {
+            font-size: 24px;
+        }
+
+        .ilfen-test-hero {
+            padding: 100px 0 40px;
+            min-height: 80vh;
+        }
+    }
+
+    /* Animation Classes */
+    .fade-in-up {
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeInUp 0.8s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .delay-1 { animation-delay: 0.2s; }
+    .delay-2 { animation-delay: 0.4s; }
+    .delay-3 { animation-delay: 0.6s; }
+
+
+    .feature-content-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    text-align: right;
+}
+</style>
+
+<!-- Hero Section -->
+<section class="ilfen-test-hero">
+    <div class="hero-content">
+        <h2 class="hero-title fade-in-up">
+            مقياس سمات رائد الأعمال
+        </h2>
+        <h1 class="hero-subtitle fade-in-up delay-1">
+            مقياس ILFEN لتقييم سمات رائد الأعمال
+        </h1>
+        <p class="hero-description fade-in-up delay-2">
+            هل تساءلت يومًا عن السمات التي تميز رواد الأعمال الناجحين؟ الآن فرصتك لاكتشافها مع مقياس السمات الريادية! ابدأ رحلتك الآن نحو تحقيق أهدافك في ريادة الأعمال، واكتشف ما يميزك عن الآخرين.
+        </p>
+        <a href="{% url 'test_registration' %}" class="hero-button fade-in-up delay-3">
+            <i class="fa-solid fa-chevron-left"></i>
+            ابدأ المقياس الآن
+        </a>
+    </div>
+</section>
+
+<!-- Features Section -->
+
+    <div class="features-container">
+    <div class="feature-card fade-in-up">
+        <div class="feature-content-wrapper">
+            <div class="feature-icon">
+                <i class="fa-solid fa-file-lines"></i>
+            </div>
+            <div class="feature-text">
+                <h3 class="feature-title">تقييم شامل</h3>
+                <p class="feature-description">احصل على تقييم مفصل لقدراتك الريادية، بما في ذلك مهارات القيادة،
+                الابتكار، والقدرة على اتخاذ القرارات.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="feature-card fade-in-up delay-1">
+        <div class="feature-content-wrapper">
+            <div class="feature-icon">
+                <i class="fa-solid fa-chart-simple"></i>
+            </div>
+            <div class="feature-text">
+                <h3 class="feature-title">تحليل شامل لنقاط القوة</h3>
+                <p class="feature-description">احصل على نظرة معمقة حول نقاط قوتك الفريدة وكيفية استثمارها
+                لتعزيز مسيرتك الريادية.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="feature-card fade-in-up delay-2">
+        <div class="feature-content-wrapper">
+            <div class="feature-icon">
+                <i class="fa-solid fa-users"></i>
+            </div>
+            <div class="feature-text">
+                <h3 class="feature-title">فرص للتطوير</h3>
+                <p class="feature-description">اكتشف السمات الشخصية التي تؤهلك لتكون رائد أعمال ناجح، مثل
+                القدرة على اتخاذ القرار، والتكيف مع التحديات، والإبداع.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Call to Action Section -->
+<section class="test-portal-section">
+    <div class="test-container">
+        <div class="test-content">
+        <h2 class="test-portal-title fade-in-up">
+            هل لديك ما يلزم لتكون رائد أعمال ناجح؟
+        </h2>
+        <p class="test-portal-description fade-in-up delay-1">
+            يهدف الاختبار إلى قياس مدى جاهزية المتدربين من خلال تقييم معارفهم ومهاراتهم العملية وقدرتهم على التحليل واتخاذ القرارات، مع منح شهادة فورية عند اجتيازه.
+        </p>
+        </div>
+        <div class="test-button-side">
+        <a href="{% url 'test_registration' %}" class="test-button fade-in-up delay-2">
+            <i class="fa-solid fa-chevron-left"></i>
+            ابدأ الاختبار الآن
+        </a>
+        </div>
+    </div>
+</section>
+
+<!-- Font Awesome CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Intersection Observer for animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    // Observe all fade-in elements
+    document.querySelectorAll('.fade-in-up').forEach(el => {
+        observer.observe(el);
+    });
+});
+</script>
+
+{% endblock %}

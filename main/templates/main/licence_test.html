@@ -1,0 +1,613 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}اختبار الرخصة - ILEFN{% endblock %}
+
+{% block content %}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans Arabic';
+            line-height: 1.6;
+            color: #333;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Section */
+        .page-header {
+            background-image: url('./././static/images/header-banner-1.png') no-repeat center center;
+            background-size: cover;  /* makes the image cover the whole area */
+            padding: 60px 0;
+            text-align: center;
+            position: relative;
+            height: 320px;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -200px;
+            width: 400px;
+            height: 600px;
+            background: linear-gradient(135deg, #15637E 0%, transparent 70%);
+            border-radius: 50%;
+            opacity: 0.1;
+        }
+
+        .page-header::after {
+            content: '';
+            position: absolute;
+            bottom: 20px;
+            left: -150px;
+            width: 250px;
+            height: 250px;
+            background: linear-gradient(135deg, #AE863E 0%, transparent 70%);
+            border-radius: 50%;
+            opacity: 0.1;
+        }
+
+        .page-title {
+            color: black;
+            font-size: 46px;
+            font-weight: 700;
+            margin-top : 50px;
+            z-index: 1;
+        }
+
+        /* Timeline Section */
+        .timeline-section {
+            background: white;
+            padding: 80px 0;
+        }
+
+        .section-title {
+            color: #15637E;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 60px;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: #AE863E;
+            border-radius: 2px;
+        }
+
+        /* Timeline Container */
+        .timeline-container {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Vertical Line */
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: #e0e0e0;
+            transform: translateX(-50%);
+            z-index: 1;
+        }
+
+        .timeline-line-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 0%;
+            background: linear-gradient(180deg, #15637E 0%, #1C8EA5 100%);
+            transition: height 0.5s ease;
+        }
+
+        /* Timeline Items */
+        .timeline-item {
+            position: relative;
+            margin-bottom: 100px;
+            display: flex;
+            align-items: center;
+            min-height: 120px;
+        }
+
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Timeline Icon */
+        .timeline-icon {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: #e0e0e0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            transition: all 0.5s ease;
+            border: 4px solid #f8fafc;
+        }
+
+        .timeline-icon.active {
+            background: #15637E;
+            box-shadow: 0 0 20px rgba(21, 99, 126, 0.3);
+        }
+
+        .timeline-icon svg {
+            width: 32px;
+            height: 32px;
+            fill: white;
+        }
+
+        /* Timeline Content */
+        .timeline-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            max-width: 450px;
+            opacity: 0.6;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+            position: relative;
+        }
+
+        .timeline-content.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Right Side (odd items) */
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-left: auto;
+            margin-right: calc(50% + 60px);
+            border-right: 4px solid transparent;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content.active {
+            border-right-color: #15637E;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -15px;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            border-right: 15px solid white;
+        }
+
+        /* Left Side (even items) */
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-right: auto;
+            margin-left: calc(50% + 60px);
+            border-left: 4px solid transparent;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content.active {
+            border-left-color: #15637E;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -15px;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            border-left: 15px solid white;
+        }
+
+        /* Timeline Content Text */
+        .timeline-content h3 {
+            color: #15637E;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .timeline-content p {
+            line-height: 1.8;
+            color: #555;
+            font-size: 16px;
+        }
+
+        /* Test Portal Section */
+/* Test Portal Section - Exact Match to Photo Design */
+.test-portal-section {
+    background: white;
+    padding: 80px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.test-container {
+    background: linear-gradient(135deg, #2A5F73 0%, #1E4A5C 100%);
+    border-radius: 25px;
+    padding: 0;
+    max-width: 1100px;
+    width: 90%;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    position: relative;
+    min-height: 300px;
+}
+
+/* Left side - Button area */
+.test-button-side {
+    flex: 0 0 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+.test-button {
+    background: white;
+    color: #2A5F73;
+    padding: 16px 40px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: none;
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.test-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(42, 95, 115, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.test-button:hover::before {
+    left: 100%;
+}
+
+.test-button:hover {
+    background: #f0f8ff;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(255, 255, 255, 0.3);
+}
+
+.test-button i {
+    font-size: 18px;
+}
+
+/* Right side - Content area */
+.test-content {
+    flex: 1;
+    padding: 40px 60px 40px 20px;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+}
+
+.test-portal-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+.test-portal-description {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 0;
+    line-height: 1.6;
+}
+
+/* Add decorative squares like the photo */
+.test-container::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    z-index: 1;
+}
+
+.test-container::after {
+    content: '';
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    z-index: 1;
+}
+
+/* Additional decorative elements */
+.test-container {
+    background:
+        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 50%),
+        linear-gradient(135deg, #2A5F73 0%, #1E4A5C 100%);
+}
+
+/* Responsive Design for Test Portal */
+@media (max-width: 768px) {
+    .test-portal-section {
+        padding: 60px 0;
+    }
+
+    .test-container {
+        width: 95%;
+        border-radius: 20px;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .test-button-side {
+        flex: none;
+        order: 2;
+        padding: 20px;
+    }
+
+    .test-content {
+        flex: none;
+        order: 1;
+        padding: 30px;
+        text-align: center;
+    }
+
+    .test-portal-title {
+        font-size: 24px;
+    }
+
+    .test-portal-description {
+        font-size: 14px;
+        margin-bottom: 0;
+    }
+
+    .test-button {
+        padding: 14px 30px;
+        font-size: 15px;
+    }
+}
+    </style>
+
+    <!-- Header Section -->
+    <section class="page-header" style="background-image: url('{% static 'images/header-banner-1.png' %}');
+                background-size: cover;
+                background-position: center;
+                background-position: center bottom;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                overflow: hidden;">
+        <div >
+            <h1 class="page-title">اختبار الرخصة</h1>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section class="timeline-section">
+        <div class="container">
+            <div class="timeline-container">
+                <!-- Timeline Line with Progress -->
+                <div class="timeline-line">
+                    <div class="timeline-line-progress" id="timelineProgress"></div>
+                </div>
+
+                <!-- Timeline Item 1: مقدمة -->
+                <div class="timeline-item" data-step="1">
+                    <div class="timeline-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="800px" height="800px" viewBox="0 0 24 24" fill="none"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M4 8C4 5.17157 4 3.75736 4.87868 2.87868C5.75736 2 7.17157 2 10 2H14C16.8284 2 18.2426 2 19.1213 2.87868C20 3.75736 20 5.17157 20 8V16C20 18.8284 20 20.2426 19.1213 21.1213C18.2426 22 16.8284 22 14 22H10C7.17157 22 5.75736 22 4.87868 21.1213C4 20.2426 4 18.8284 4 16V8Z" stroke="#15637e" stroke-width="1.5"></path><path d="M19.8978 16H7.89778C6.96781 16 6.50282 16 6.12132 16.1022C5.08604 16.3796 4.2774 17.1883 4 18.2235" stroke="#15637e" stroke-width="1.5"></path><path opacity="0.5" d="M8 7H16" stroke="#15637e" stroke-width="1.5" stroke-linecap="round"></path><path opacity="0.5" d="M8 10.5H13" stroke="#15637e" stroke-width="1.5" stroke-linecap="round"></path><path opacity="0.5" d="M19.5 19H8" stroke="#15637e" stroke-width="1.5" stroke-linecap="round"></path></g></svg>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>مقدمة</h3>
+                        <p>
+                            الاختبار الأساسي للرخصة الشاملة لريادة الأعمال يهدف إلى قياس معرفة المتقدم بأساسيات إنشاء المشروعات. ويعني النجاح في الاختبار أن المتقدم لديه المعرفة الكافية بخطوات وطرق إنشاء المشروع الريادي باحترافية، كما لديه إلمام كافي بالمصطلحات والمفاهيم الأساسية في إقامة المشروعات الريادية.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 2: طريقة الاختبار -->
+                <div class="timeline-item" data-step="2">
+                    <div class="timeline-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="800px" height="800px" viewBox="0 0 24 24" fill="none"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M18.18 8.03933L18.6435 7.57589C19.4113 6.80804 20.6563 6.80804 21.4241 7.57589C22.192 8.34374 22.192 9.58868 21.4241 10.3565L20.9607 10.82M18.18 8.03933C18.18 8.03933 18.238 9.02414 19.1069 9.89309C19.9759 10.762 20.9607 10.82 20.9607 10.82M18.18 8.03933L13.9194 12.2999C13.6308 12.5885 13.4865 12.7328 13.3624 12.8919C13.2161 13.0796 13.0906 13.2827 12.9882 13.4975C12.9014 13.6797 12.8368 13.8732 12.7078 14.2604L12.2946 15.5L12.1609 15.901M20.9607 10.82L16.7001 15.0806C16.4115 15.3692 16.2672 15.5135 16.1081 15.6376C15.9204 15.7839 15.7173 15.9094 15.5025 16.0118C15.3203 16.0986 15.1268 16.1632 14.7396 16.2922L13.5 16.7054L13.099 16.8391M13.099 16.8391L12.6979 16.9728C12.5074 17.0363 12.2973 16.9867 12.1553 16.8447C12.0133 16.7027 11.9637 16.4926 12.0272 16.3021L12.1609 15.901M13.099 16.8391L12.1609 15.901" stroke="#15637e" stroke-width="1.5"></path><path d="M8 13H10.5" stroke="#15637e" stroke-width="1.5" stroke-linecap="round"></path><path d="M8 9H14.5" stroke="#15637e" stroke-width="1.5" stroke-linecap="round"></path><path d="M8 17H9.5" stroke="#15637e" stroke-width="1.5" stroke-linecap="round"></path><path opacity="0.5" d="M3 10C3 6.22876 3 4.34315 4.17157 3.17157C5.34315 2 7.22876 2 11 2H13C16.7712 2 18.6569 2 19.8284 3.17157C21 4.34315 21 6.22876 21 10V14C21 17.7712 21 19.6569 19.8284 20.8284C18.6569 22 16.7712 22 13 22H11C7.22876 22 5.34315 22 4.17157 20.8284C3 19.6569 3 17.7712 3 14V10Z" stroke="#15637e" stroke-width="1.5"></path></g></svg>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>طريقة الاختبار</h3>
+                        <p>
+                            هناك 50 سؤال متعدد الاختيار. يتم اختيار إجابة واحدة صحيحة. والأسئلة تتدرج من أسئلة سهلة للغاية إلى أسئلة صعبة. كما أنها تشمل كافة خطوات إنشاء المشروع بما في ذلك أسئلة خاصة بالتمويل والمحاسبة، وأخرى تحتاج إلى تفكير تحليلي.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 3: مدة الاختبار -->
+                <div class="timeline-item" data-step="3">
+                    <div class="timeline-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="800px" height="800px" viewBox="0 0 24 24" fill="none"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path opacity="0.5" d="M21 13C21 17.9706 16.9706 22 12 22C7.02944 22 3 17.9706 3 13C3 8.02944 7.02944 4 12 4C16.9706 4 21 8.02944 21 13Z" stroke="#15637e" stroke-width="1.5"></path><path d="M12 13V9" stroke="#15637e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M10 2H14" stroke="#15637e" stroke-width="1.5" stroke-linecap="round"></path></g></svg>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>مدة الاختبار</h3>
+                        <p>
+                           مدة الاختبار 50 دقيقة. أي أن متوسط كل سؤال يستغرق حوالي 60 ثانية. ولكن هناك أسئلة قصيرة لا تتطلب وقتاً طويلاً، وأخرى طويلة تستغرق ربما دقيقة للإجابة عليها. وقد وضع توقيت الاختبار بناءً على دراسات تبين متوسط الوقت الذي يحتاجه الشخص متوسط المهارة.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 4: توقيت الاختبار -->
+                <div class="timeline-item" data-step="4">
+                    <div class="timeline-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="800px" height="800px" viewBox="0 0 24 24" fill="none"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M2 12C2 8.22876 2 6.34315 3.17157 5.17157C4.34315 4 6.22876 4 10 4H14C17.7712 4 19.6569 4 20.8284 5.17157C22 6.34315 22 8.22876 22 12V14C22 17.7712 22 19.6569 20.8284 20.8284C19.6569 22 17.7712 22 14 22H10C6.22876 22 4.34315 22 3.17157 20.8284C2 19.6569 2 17.7712 2 14V12Z" stroke="#15637e" stroke-width="1.5"></path><path opacity="0.5" d="M7 4V2.5" stroke="#15637e" stroke-width="1.5" stroke-linecap="round"></path><path opacity="0.5" d="M17 4V2.5" stroke="#15637e" stroke-width="1.5" stroke-linecap="round"></path><path opacity="0.5" d="M2.5 9H21.5" stroke="#15637e" stroke-width="1.5" stroke-linecap="round"></path><path d="M18 17C18 17.5523 17.5523 18 17 18C16.4477 18 16 17.5523 16 17C16 16.4477 16.4477 16 17 16C17.5523 16 18 16.4477 18 17Z" fill="#15637e"></path><path d="M18 13C18 13.5523 17.5523 14 17 14C16.4477 14 16 13.5523 16 13C16 12.4477 16.4477 12 17 12C17.5523 12 18 12.4477 18 13Z" fill="#15637e"></path><path d="M13 17C13 17.5523 12.5523 18 12 18C11.4477 18 11 17.5523 11 17C11 16.4477 11.4477 16 12 16C12.5523 16 13 16.4477 13 17Z" fill="#15637e"></path><path d="M13 13C13 13.5523 12.5523 14 12 14C11.4477 14 11 13.5523 11 13C11 12.4477 11.4477 12 12 12C12.5523 12 13 12.4477 13 13Z" fill="#15637e"></path><path d="M8 17C8 17.5523 7.55228 18 7 18C6.44772 18 6 17.5523 6 17C6 16.4477 6.44772 16 7 16C7.55228 16 8 16.4477 8 17Z" fill="#15637e"></path><path d="M8 13C8 13.5523 7.55228 14 7 14C6.44772 14 6 13.5523 6 13C6 12.4477 6.44772 12 7 12C7.55228 12 8 12.4477 8 13Z" fill="#15637e"></path></g></svg>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>توقيت الاختبار</h3>
+                        <p>
+                           الاختبار موقت بوقت محدد وهناك ساعة تنازلية للوقت .. وبعدها ينتهي الاختبار تلقائيا وتخرج النتيجة.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 5: درجة النجاح -->
+                <div class="timeline-item" data-step="5">
+                    <div class="timeline-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="800px" height="800px" viewBox="0 0 24 24" fill="none"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M3.46447 20.5355C4.92893 22 7.28595 22 12 22C16.714 22 19.0711 22 20.5355 20.5355C22 19.0711 22 16.714 22 12C22 7.28595 22 4.92893 20.5355 3.46447C19.0711 2 16.714 2 12 2C7.28595 2 4.92893 2 3.46447 3.46447C2 4.92893 2 7.28595 2 12C2 16.714 2 19.0711 3.46447 20.5355Z" stroke="#15637e" stroke-width="1.5"></path><path opacity="0.5" d="M18 8.49998H14M18 14.5H14M18 17.5H14M10 8.49999H8M8 8.49999L6 8.49999M8 8.49999L8 6.49998M8 8.49999L8 10.5M9.5 14.5L8.00001 16M8.00001 16L6.50001 17.5M8.00001 16L6.5 14.5M8.00001 16L9.49999 17.5" stroke="#15637e" stroke-width="1.5" stroke-linecap="round"></path></g></svg>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>درجة النجاح</h3>
+                        <p>
+                            يجب على المتقدم الحصول على 40 إجابة صحيحة من 50 سؤال ليعتبر بذلك مجتازاً لاختبار الرخصة الشاملة لريادة الأعمال وبالتالي يمكنه الحصول على الشهادة الرسمية المعتمدة.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="timeline-item" data-step="6">
+                    <div class="timeline-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="800px" height="800px" viewBox="0 0 24 24" fill="none"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path opacity="0.5" d="M11.1459 7.02251C11.5259 6.34084 11.7159 6 12 6C12.2841 6 12.4741 6.34084 12.8541 7.02251L12.9524 7.19887C13.0603 7.39258 13.1143 7.48944 13.1985 7.55334C13.2827 7.61725 13.3875 7.64097 13.5972 7.68841L13.7881 7.73161C14.526 7.89857 14.895 7.98205 14.9828 8.26432C15.0706 8.54659 14.819 8.84072 14.316 9.42898L14.1858 9.58117C14.0429 9.74833 13.9714 9.83191 13.9392 9.93531C13.9071 10.0387 13.9179 10.1502 13.9395 10.3733L13.9592 10.5763C14.0352 11.3612 14.0733 11.7536 13.8435 11.9281C13.6136 12.1025 13.2682 11.9435 12.5773 11.6254L12.3986 11.5431C12.2022 11.4527 12.1041 11.4075 12 11.4075C11.8959 11.4075 11.7978 11.4527 11.6014 11.5431L11.4227 11.6254C10.7318 11.9435 10.3864 12.1025 10.1565 11.9281C9.92674 11.7536 9.96476 11.3612 10.0408 10.5763L10.0605 10.3733C10.0821 10.1502 10.0929 10.0387 10.0608 9.93531C10.0286 9.83191 9.95713 9.74833 9.81418 9.58117L9.68403 9.42898C9.18097 8.84072 8.92945 8.54659 9.01723 8.26432C9.10501 7.98205 9.47396 7.89857 10.2119 7.73161L10.4028 7.68841C10.6125 7.64097 10.7173 7.61725 10.8015 7.55334C10.8857 7.48944 10.9397 7.39258 11.0476 7.19887L11.1459 7.02251Z" stroke="#15637e" stroke-width="1.5"></path><path d="M19 9C19 12.866 15.866 16 12 16C8.13401 16 5 12.866 5 9C5 5.13401 8.13401 2 12 2C15.866 2 19 5.13401 19 9Z" stroke="#15637e" stroke-width="1.5"></path><path opacity="0.5" d="M12 16.0678L8.22855 19.9728C7.68843 20.5321 7.41837 20.8117 7.18967 20.9084C6.66852 21.1289 6.09042 20.9402 5.81628 20.4602C5.69597 20.2495 5.65848 19.8695 5.5835 19.1095C5.54117 18.6804 5.52 18.4658 5.45575 18.2861C5.31191 17.8838 5.00966 17.5708 4.6211 17.4219C4.44754 17.3554 4.24033 17.3335 3.82589 17.2896C3.09187 17.212 2.72486 17.1732 2.52138 17.0486C2.05772 16.7648 1.87548 16.1662 2.08843 15.6266C2.18188 15.3898 2.45194 15.1102 2.99206 14.5509L5.45575 12" stroke="#15637e" stroke-width="1.5"></path><path opacity="0.5" d="M12 16.0678L15.7715 19.9728C16.3116 20.5321 16.5816 20.8117 16.8103 20.9084C17.3315 21.1289 17.9096 20.9402 18.1837 20.4602C18.304 20.2495 18.3415 19.8695 18.4165 19.1095C18.4588 18.6804 18.48 18.4658 18.5442 18.2861C18.6881 17.8838 18.9903 17.5708 19.3789 17.4219C19.5525 17.3554 19.7597 17.3335 20.1741 17.2896C20.9081 17.212 21.2751 17.1732 21.4786 17.0486C21.9423 16.7648 22.1245 16.1662 21.9116 15.6266C21.8181 15.3898 21.5481 15.1102 21.0079 14.5509L18.5442 12" stroke="#15637e" stroke-width="1.5"></path></g></svg>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>الحصول على الشهادة</h3>
+                        <p>
+                            تكون شهادة الرخصة الشاملة لريادة الأعمال جاهزة للتسليم بعد إجراء الاختبار مباشرة.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Test Portal Section -->
+<section class="test-portal-section">
+    <div class="test-container">
+        <div class="test-content">
+            <h2 class="test-portal-title">اختبار الرخصة الشاملة لريادة الاعمال (ILFEN)</h2>
+            <p class="test-portal-description">
+                يمكن التقديم للاختبار وإجراء الاختبار بشكل آلي والحصول على شهادة Ilfen من خلال البوابة.
+            </p>
+        </div>
+
+        <div class="test-button-side">
+            <a href="https://cert.ilfen.com/login" class="test-button" id="testPortalButton" target="_blank">
+                    بوابة الاختبار →
+            </a>
+        </div>
+    </div>
+</section>
+
+    <script>
+        // Timeline animation on scroll
+        function updateTimeline() {
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            const timelineProgress = document.getElementById('timelineProgress');
+            const windowHeight = window.innerHeight;
+            const scrollTop = window.pageYOffset;
+
+            let activeItems = 0;
+            let totalHeight = 0;
+
+            timelineItems.forEach((item, index) => {
+                const itemTop = item.offsetTop;
+                const itemHeight = item.offsetHeight;
+                const icon = item.querySelector('.timeline-icon');
+                const content = item.querySelector('.timeline-content');
+
+                // Calculate if item is in view
+                const itemCenter = itemTop + (itemHeight / 2);
+                const isInView = scrollTop + (windowHeight / 1.5) >= itemCenter;
+
+                if (isInView) {
+                    icon.classList.add('active');
+                    content.classList.add('active');
+                    activeItems = index + 1;
+                } else {
+                    icon.classList.remove('active');
+                    content.classList.remove('active');
+                }
+
+                if (index === timelineItems.length - 1) {
+                    totalHeight = itemTop + itemHeight;
+                }
+            });
+
+            // Update progress line
+            if (activeItems > 0) {
+                const lastActiveItem = timelineItems[activeItems - 1];
+                const progressHeight = (lastActiveItem.offsetTop + (lastActiveItem.offsetHeight / 2)) / totalHeight * 100;
+                timelineProgress.style.height = Math.min(progressHeight, 100) + '%';
+            } else {
+                timelineProgress.style.height = '0%';
+            }
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTimeline();
+        });
+
+        // Update on scroll with throttling
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    updateTimeline();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
+        document.getElementById('testPortalButton').addEventListener('click', function(e) {
+            // Allow default navigation behavior
+            console.log('Navigating to test portal...');
+            // The browser will now follow the href link normally
+        });
+    </script>
+{% endblock %}

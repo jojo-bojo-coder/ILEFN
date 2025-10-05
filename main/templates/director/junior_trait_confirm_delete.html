@@ -1,0 +1,587 @@
+{% extends "director_base.html" %}
+{% load static %}
+
+{% block title %}حذف سمة الناشئين - المدير{% endblock %}
+{% block page_title %}حذف سمة الناشئين{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Enhanced Content Header */
+    .content-header {
+        margin-bottom: 36px;
+        padding-bottom: 24px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+
+    .page-title {
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .page-title::before {
+        content: '🧒';
+        font-size: 36px;
+    }
+
+    .breadcrumb {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        color: #666;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .breadcrumb a {
+        color: var(--primary-color);
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .breadcrumb a:hover {
+        color: var(--accent-color);
+    }
+
+    /* Enhanced Header Actions */
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .btn-danger {
+        background: linear-gradient(135deg, var(--danger-color) 0%, #c82333 100%);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: var(--transition);
+        box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+    }
+
+    .btn-danger:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(220, 53, 69, 0.3);
+        color: white;
+    }
+
+    .btn-secondary {
+        background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: var(--transition);
+        box-shadow: 0 4px 12px rgba(108, 117, 125, 0.2);
+        margin-top:20px;
+    }
+
+    .btn-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(108, 117, 125, 0.3);
+        color: white;
+    }
+
+    /* Enhanced Card */
+    .card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        border: 1px solid #f0f0f0;
+        margin-bottom: 32px;
+        overflow: hidden;
+        transition: var(--transition);
+    }
+
+    .card:hover {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .card-header {
+        padding: 24px 28px;
+        border-bottom: 1px solid #f0f0f0;
+        background: linear-gradient(135deg, #fdf2f2 0%, #fce8e8 100%);
+    }
+
+    .card-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #dc3545;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .card-body {
+        padding: 28px;
+    }
+
+    /* Enhanced Alert */
+    .alert {
+        padding: 20px 24px;
+        border-radius: 12px;
+        margin-bottom: 24px;
+        border: 1px solid transparent;
+        border-right: 4px solid;
+    }
+
+    .alert-danger {
+        color: #721c24;
+        background: linear-gradient(135deg, #fdf2f2 0%, #fce8e8 100%);
+        border-color: #f5c6cb;
+        border-right-color: #dc3545;
+    }
+
+    .alert-danger h4 {
+        color: #dc3545;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    /* Trait Details */
+    .trait-details {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        padding: 24px;
+        border-radius: 12px;
+        border: 1px solid #e9ecef;
+        margin-bottom: 32px;
+    }
+
+    .trait-details h5 {
+        color: #218c74;
+        font-weight: 600;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .trait-details p {
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .trait-details p:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+
+    .trait-details strong {
+        color: #218c74;
+        min-width: 120px;
+    }
+
+    /* Badges */
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 12px;
+        font-size: 12px;
+        font-weight: 600;
+        border-radius: 20px;
+        gap: 6px;
+    }
+
+    .badge-success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .badge-danger {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f1b0b7;
+    }
+
+    .badge-warning {
+        background: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeaa7;
+    }
+
+    .badge-primary {
+        background: linear-gradient(135deg, #218c74 0%, #1a7560 100%);
+        color: white;
+        border: 1px solid #1a7560;
+    }
+
+    .order-badge {
+        background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 14px;
+        min-width: 40px;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(108, 117, 125, 0.2);
+    }
+
+    .weight-badge {
+        background: linear-gradient(135deg, #218c74 0%, #1a7560 100%);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 14px;
+        min-width: 40px;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(33, 140, 116, 0.2);
+    }
+
+    .questions-count-badge {
+        background: linear-gradient(135deg, #fd7e14 0%, #e55a00 100%);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 14px;
+        min-width: 40px;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(253, 126, 20, 0.2);
+    }
+
+    /* Form Actions */
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-start;
+        margin-top: 32px;
+        padding-top: 24px;
+        border-top: 1px solid #f0f0f0;
+    }
+
+    /* Junior Specific Styling */
+    .junior-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+        color: #856404;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-right: 10px;
+        border: 1px solid #ffeaa7;
+    }
+
+    .junior-indicator::before {
+        content: '🧒';
+        font-size: 10px;
+    }
+
+    /* Warning Icon Animation */
+    .warning-icon {
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.1);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    /* Questions List */
+    .questions-list {
+        margin-top: 16px;
+        padding: 16px;
+        background: white;
+        border-radius: 8px;
+        border: 1px solid #e9ecef;
+    }
+
+    .questions-list h6 {
+        color: #dc3545;
+        font-weight: 600;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .questions-list ul {
+        margin: 0;
+        padding-right: 20px;
+    }
+
+    .questions-list li {
+        padding: 6px 0;
+        color: #666;
+        border-bottom: 1px solid #f8f9fa;
+    }
+
+    .questions-list li:last-child {
+        border-bottom: none;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .card-body {
+            padding: 20px;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .btn-danger, .btn-secondary {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .trait-details {
+            padding: 16px;
+        }
+
+        .trait-details p {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+        }
+
+        .trait-details strong {
+            min-width: auto;
+        }
+
+        .questions-list {
+            padding: 12px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="page-title">
+                <span class="junior-indicator">ناشئين</span>
+                حذف سمة الناشئين
+            </h1>
+            <div class="breadcrumb">
+                <a href="{% url 'director_dashboard' %}">الرئيسية</a>
+                <span>/</span>
+                <a href="{% url 'junior_trait_list' %}">سمات الناشئين</a>
+                <span>/</span>
+                <span>حذف سمة</span>
+            </div>
+        </div>
+        <a href="{% url 'junior_trait_list' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-right"></i>
+            رجوع للقائمة
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="fas fa-trash text-danger"></i>
+            تأكيد الحذف
+        </h3>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-danger">
+            <h4>
+                <i class="fas fa-exclamation-triangle warning-icon"></i>
+                تحذير! هذا الإجراء لا يمكن التراجع عنه
+            </h4>
+            <p class="mb-2">أنت على وشك حذف سمة الناشئين التالية بشكل دائم. هذه العملية لا يمكن استعادتها.</p>
+            <p class="mb-0"><strong>⚠️ ملاحظة هامة:</strong> سيتم حذف جميع الأسئلة المرتبطة بهذه السمة أيضاً.</p>
+        </div>
+
+        <div class="trait-details">
+            <h5>
+                <i class="fas fa-info-circle"></i>
+                تفاصيل السمة المراد حذفها:
+            </h5>
+            <p>
+                <strong>الترتيب:</strong>
+                <span class="order-badge">{{ trait.order }}</span>
+            </p>
+            <p>
+                <strong>اسم السمة:</strong>
+                <span class="badge badge-primary">
+                    <i class="fas fa-tag"></i>
+                    {{ trait.name }}
+                </span>
+            </p>
+            <p>
+                <strong>الاسم الإنجليزي:</strong>
+                <span class="text-muted">{{ trait.name_en|default:"غير محدد" }}</span>
+            </p>
+            <p>
+                <strong>الوزن:</strong>
+                <span class="weight-badge">{{ trait.weight }}</span>
+            </p>
+            <p>
+                <strong>عدد الأسئلة المرتبطة:</strong>
+                <span class="questions-count-badge">
+                    <i class="fas fa-question-circle"></i>
+                    {{ trait.questions.count }}
+                </span>
+            </p>
+            <p>
+                <strong>الحالة:</strong>
+                {% if trait.is_active %}
+                <span class="badge badge-success">
+                    <i class="fas fa-check"></i>
+                    نشط
+                </span>
+                {% else %}
+                <span class="badge badge-danger">
+                    <i class="fas fa-times"></i>
+                    غير نشط
+                </span>
+                {% endif %}
+            </p>
+        </div>
+
+        {% if trait.questions.count > 0 %}
+        <div class="questions-list">
+            <h6>
+                <i class="fas fa-list"></i>
+                الأسئلة المرتبطة التي سيتم حذفها ({{ trait.questions.count }}):
+            </h6>
+            <ul>
+                {% for question in trait.questions.all|slice:":5" %}
+                <li>
+                    <i class="fas fa-question-circle text-muted"></i>
+                    {{ question.text|truncatewords:10 }}
+                    {% if question.is_reverse_scored %}
+                    <small class="badge badge-warning">
+                        <i class="fas fa-exchange-alt"></i>
+                        عكس التقييم
+                    </small>
+                    {% endif %}
+                </li>
+                {% endfor %}
+                {% if trait.questions.count > 5 %}
+                <li class="text-muted">
+                    <i class="fas fa-ellipsis-h"></i>
+                    و {{ trait.questions.count|add:"-5" }} أسئلة أخرى...
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <form method="post" class="form">
+            {% csrf_token %}
+            <div class="form-actions">
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i>
+                    نعم، احذف السمة وجميع الأسئلة
+                </button>
+                <a href="{% url 'junior_trait_list' %}" class="btn btn-secondary">
+                    <i class="fas fa-times"></i>
+                    إلغاء والعودة
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add confirmation for delete action
+        const deleteForm = document.querySelector('form');
+        const deleteButton = document.querySelector('.btn-danger');
+
+        if (deleteForm && deleteButton) {
+            deleteForm.addEventListener('submit', function(e) {
+                const questionsCount = {{ trait.questions.count }};
+                let message = '⚠️ هل أنت متأكد تمامًا من حذف هذه السمة؟ هذا الإجراء نهائي ولا يمكن التراجع عنه.';
+
+                if (questionsCount > 0) {
+                    message += `\n\n❌ سيتم أيضًا حذف ${questionsCount} سؤال مرتبط بهذه السمة!`;
+                }
+
+                if (!confirm(message)) {
+                    e.preventDefault();
+                }
+            });
+
+            // Add extra visual feedback for delete button
+            deleteButton.addEventListener('mouseover', function() {
+                this.style.transform = 'translateY(-2px) scale(1.02)';
+            });
+
+            deleteButton.addEventListener('mouseout', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        }
+
+        // Add color coding for badges based on values
+        const orderBadge = document.querySelector('.order-badge');
+        if (orderBadge) {
+            const order = parseInt(orderBadge.textContent);
+            if (order <= 5) {
+                orderBadge.style.background = 'linear-gradient(135deg, #28a745 0%, #218838 100%)';
+            } else if (order <= 10) {
+                orderBadge.style.background = 'linear-gradient(135deg, #ffc107 0%, #e0a800 100%)';
+            } else {
+                orderBadge.style.background = 'linear-gradient(135deg, #fd7e14 0%, #e55a00 100%)';
+            }
+        }
+
+        const weightBadge = document.querySelector('.weight-badge');
+        if (weightBadge) {
+            const weight = parseFloat(weightBadge.textContent);
+            if (weight >= 0.8) {
+                weightBadge.style.background = 'linear-gradient(135deg, #28a745 0%, #218838 100%)';
+            } else if (weight >= 0.5) {
+                weightBadge.style.background = 'linear-gradient(135deg, #ffc107 0%, #e0a800 100%)';
+            } else {
+                weightBadge.style.background = 'linear-gradient(135deg, #fd7e14 0%, #e55a00 100%)';
+            }
+        }
+
+        const questionsBadge = document.querySelector('.questions-count-badge');
+        if (questionsBadge) {
+            const questionsCount = parseInt(questionsBadge.textContent.match(/\d+/)[0]);
+            if (questionsCount === 0) {
+                questionsBadge.style.background = 'linear-gradient(135deg, #6c757d 0%, #5a6268 100%)';
+            } else if (questionsCount <= 5) {
+                questionsBadge.style.background = 'linear-gradient(135deg, #28a745 0%, #218838 100%)';
+            } else if (questionsCount <= 10) {
+                questionsBadge.style.background = 'linear-gradient(135deg, #ffc107 0%, #e0a800 100%)';
+            } else {
+                questionsBadge.style.background = 'linear-gradient(135deg, #fd7e14 0%, #e55a00 100%)';
+            }
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,761 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مقياس ILFEN للناشئين</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', 'IBM Plex Sans Arabic', sans-serif;
+            background: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        .header {
+            background: white;
+            padding: 20px 0;
+            position: relative;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a1a2e;
+            line-height: 1.6;
+        }
+
+        .logo-subtitle {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #e85a71;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #d64764;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #1a1a2e;
+            border: 2px solid #e9ecef;
+        }
+
+        .btn-secondary:hover {
+            background: #f8f9fa;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: #1a1a2e;
+            min-height: 85vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin: 0 20px 0 20px;
+            border-radius: 30px 30px 30px 30px;
+        }
+
+        .dashed-border {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            right: 25px;
+            bottom: 25px;
+            border: 3px dashed rgba(255, 255, 255, 0.4);
+            border-radius: 20px;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            color: white;
+            max-width: 900px;
+            padding: 60px 40px;
+        }
+
+        .hero-title {
+            font-size: 52px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.3;
+            color: white;
+        }
+
+        .hero-subtitle {
+            font-size: 52px;
+            font-weight: 700;
+            margin-bottom: 35px;
+            color: #f39c12;
+        }
+
+        .hero-description {
+            font-size: 19px;
+            line-height: 1.9;
+            margin-bottom: 45px;
+            color: rgba(255, 255, 255, 0.85);
+            max-width: 750px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-btn {
+            background: #e85a71;
+            color: white;
+            padding: 18px 45px;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px rgba(232, 90, 113, 0.35);
+            text-decoration: none;
+        }
+
+        .hero-btn:hover {
+            background: #d64764;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(232, 90, 113, 0.45);
+        }
+
+        /* Background Shapes */
+        .shape-triangle {
+            position: absolute;
+            top: 12%;
+            right: 8%;
+            width: 90px;
+            height: 90px;
+            background: #f39c12;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            opacity: 0.8;
+        }
+
+        .shape-circle {
+            position: absolute;
+            bottom: 22%;
+            right: 12%;
+            width: 70px;
+            height: 70px;
+            background: #e85a71;
+            border-radius: 50%;
+            opacity: 0.7;
+        }
+
+        .shape-half-circle {
+            position: absolute;
+            bottom: 8%;
+            left: 4%;
+            width: 120px;
+            height: 60px;
+            background: #27ae60;
+            border-radius: 60px 60px 0 0;
+            opacity: 0.85;
+        }
+
+        .shape-dots {
+            position: absolute;
+            top: 32%;
+            right: 18%;
+            display: grid;
+            grid-template-columns: repeat(8, 10px);
+            grid-template-rows: repeat(8, 10px);
+            gap: 5px;
+        }
+
+        .dot {
+            width: 5px;
+            height: 5px;
+            background: rgba(46, 204, 113, 0.7);
+            border-radius: 50%;
+        }
+
+        /* About Section */
+        .about-section {
+            padding: 200px 0;
+            background: white;
+        }
+
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 90px;
+            align-items: center;
+        }
+
+        .about-text h2 {
+            font-size: 38px;
+            font-weight: 700;
+            color: #e85a71;
+            margin-bottom: 30px;
+            line-height: 1.4;
+        }
+
+        .about-text p {
+            font-size: 17px;
+            line-height: 2;
+            color: #555;
+            margin-bottom: 35px;
+        }
+
+        .about-image {
+            text-align: center;
+        }
+
+        .about-image-placeholder {
+            width: 100%;
+            max-width: 450px;
+            height: 300px;
+            background: linear-gradient(135deg, #ff6b9d 0%, #ffa06f 100%);
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+             margin-right: auto; /* إزالة margin-auto */
+            margin-left: 80px;
+            box-shadow: 0 15px 50px rgba(255, 107, 157, 0.3);
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 100px 0;
+            background: white;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 35px;
+            margin-top: 0;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 45px 35px;
+            border-radius: 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 3px dashed transparent;
+        }
+
+        .feature-card.orange {
+            border-color: #f39c12;
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+        }
+
+        .feature-card.blue {
+            border-color: #3498db;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+        }
+
+        .feature-card.red {
+            border-color: #e85a71;
+            background: linear-gradient(135deg, #e85a71 0%, #d64764 100%);
+            color: white;
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+        }
+
+        .feature-icon i {
+            font-size: 28px;
+            color: white;
+        }
+
+        .feature-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+
+        .feature-description {
+            font-size: 16px;
+            line-height: 1.8;
+            opacity: 0.95;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+            margin: 0 70px 60px 70px;
+            border-radius: 30px 30px 30px 30px;
+        }
+
+        .cta-content {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .cta-text {
+            color: white;
+        }
+
+        .cta-text h2 {
+            font-size: 38px;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+
+        .cta-text p {
+            font-size: 17px;
+            line-height: 1.9;
+            opacity: 0.95;
+        }
+
+        .cta-button-area {
+            text-align: center;
+        }
+
+        .cta-btn {
+            background: white;
+            color: #f39c12;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            text-decoration: none;
+            margin-top:20px;
+        }
+
+        .cta-btn:hover {
+            background: #f8f9fa;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-illustration {
+            position: absolute;
+            left: 60px;
+            bottom: -30px;
+            width: 250px;
+            height: 250px;
+            opacity: 0.12;
+        }
+
+        /* Footer */
+        .footer {
+            background: #f5f7fa;
+            padding: 80px 0 40px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 80px;
+            margin-bottom: 40px;
+        }
+
+        .footer-info h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 20px;
+        }
+
+        .footer-subtitle {
+            font-size: 26px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 20px;
+        }
+
+        .footer-info p {
+            font-size: 16px;
+            line-height: 1.9;
+            color: #666;
+        }
+
+        .contact-form h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #e85a71;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px 18px;
+            border: none;
+            background: white;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .form-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(232, 90, 113, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: #e85a71;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #d64764;
+            transform: translateY(-2px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 35px;
+            border-top: 1px solid #ddd;
+            font-size: 15px;
+            color: #666;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .hero-title, .hero-subtitle {
+                font-size: 32px;
+            }
+
+            .about-content,
+            .cta-content,
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-text">
+                    مقياس ILFEN<br>
+                    <span class="logo-subtitle">للناشئين</span>
+                </div>
+            </div>
+            <div class="header-buttons">
+                <a href="{% url 'home' %}" class="btn btn-secondary">الرئيسية</a>
+                <a class="btn btn-primary" href="{% url 'junior_test_registration' %}">
+                    ابدأ المقياس
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="dashed-border"></div>
+
+        <!-- Background Shapes -->
+        <div class="shape-triangle"></div>
+        <div class="shape-circle"></div>
+        <div class="shape-half-circle"></div>
+        <div class="shape-dots">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+
+        <div class="hero-content">
+            <h1 class="hero-title">هل أنت مستعد لاكتشاف</h1>
+            <h2 class="hero-subtitle">مهاراتك الريادية؟</h2>
+            <p class="hero-description">
+                هذا الاختبار سيساعدك على اكتشاف ما إذا كنت تمتلك الصفات التي تجعلك رائد أعمال مميز! أجب بكل صراحة واكتشف قدراتك!
+            </p>
+            <a class="hero-btn" href="{% url 'junior_test_registration' %}">
+                <i class="fas fa-chevron-left"></i>
+                ابدأ المقياس الآن
+            </a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>مقياس السمات الريادية للناشئين</h2>
+                    <p>
+                        هو مقياس تفاعلي يهدف إلى مساعدة الناشئين على اكتشاف مهاراتهم الريادية بطريقة سهلة وبسيطة، من خلال مجموعة من الأسئلة المصممة بعناية، يقدم الاختبار تحليلاً دقيقاً لنقاط القوة وفرص التطوير، مما يساعد الناشئين على تعزيز قدراتهم الإبداعية والاستعداد للنجاح في ريادة الأعمال.
+                    </p>
+                    <a class="btn btn-primary" href="{% url 'junior_test_registration' %}">
+                        ابدأ المقياس الآن
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                </div>
+                <div class="about-image">
+                    <div class="about-image-placeholder">
+                        <img src="{% static 'images/about-junior.png' %}" alt="About Junior">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <div class="features-grid">
+                <div class="feature-card red">
+                    <div class="feature-icon">
+                        <i class="fas fa-file-lines"></i>
+                    </div>
+                    <h3 class="feature-title">تقييم شامل</h3>
+                    <p class="feature-description">
+                        احصل على تقييم مفصل لقدراتك الريادية، بما في ذلك مهارات القيادة والابتكار والقدرة على اتخاذ القرارات.
+                    </p>
+                </div>
+
+                <div class="feature-card blue">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-simple"></i>
+                    </div>
+                    <h3 class="feature-title">تحليل شامل لنقاط القوة</h3>
+                    <p class="feature-description">
+                        احصل على نظرة معمقة حول نقاط قوتك الفريدة وكيفية استثمارها لتعزيز مسيرتك الريادية.
+                    </p>
+                </div>
+
+                <div class="feature-card orange">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="feature-title">فرص التطوير</h3>
+                    <p class="feature-description">
+                        اكتشف السمات الشخصية التي تؤهلك لتكون رائد أعمال ناجح، مثل القدرة على اتخاذ القرار والتكيف مع التحديات والإبداع.
+                    </p>
+                </div>
+
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <div class="cta-text">
+                    <h2>هل أنت رائد أعمال؟</h2>
+                    <p>
+                        إذا كنت تريد أن تبدأ مشروعاً خاصاً بك، هناك أشياء مهمة يجب التفكير فيها. أولاً، حاول أن تعرف ما هي الأشياء التي تجيدها وما هي مواهبك؟<br> هذا الاختبار سيساعدك على معرفة إذا كنت تستطيع النجاح في هذا الطريق أم لا.
+                    </p>
+                    <a class="cta-btn" href="{% url 'junior_test_registration' %}">
+                        <i class="fas fa-chevron-left"></i>
+                        ابدأ المقياس الآن
+                    </a>
+                </div>
+                <div class="cta-button-area">
+
+                </div>
+            </div>
+        </div>
+        <div class="cta-illustration">
+            <div style="width: 100%; height: 100%; background: rgba(255,255,255,0.15); border-radius: 50%;"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <h3>مقياس ILFEN</h3>
+                    <p class="footer-subtitle">للناشئين</p>
+                    <p>
+                        مقياس ILFEN للناشئين لتقييم سمات رائد الأعمال سوف يساعدك على التعرف على استعدادك لإنشاء عملك الخاص ومدى روح المبادرة والريادية من وجهات نظر مختلفة. كما سوف يقوم هذا الاختبار على مساعدتك لقياس وفهم بعض الصفات السلوكية والمهارات اللازمة للنجاح في مسار ريادة الأعمال.
+                    </p>
+                </div>
+
+                <div class="contact-form">
+                    <h3>تواصل معنا</h3>
+                    <form>
+                        <div class="form-group">
+                            <input type="text" class="form-input" placeholder="الاسم كامل" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-input" placeholder="البريد الإلكتروني" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-input form-textarea" placeholder="الرسالة" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">إرسال</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>جميع الحقوق محفوظة لـ ILFEN © 2025</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Contact form submission
+        document.querySelector('.contact-form form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.');
+            this.reset();
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add animation on scroll
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const animatedElements = document.querySelectorAll('.feature-card, .about-text, .about-image');
+            animatedElements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
