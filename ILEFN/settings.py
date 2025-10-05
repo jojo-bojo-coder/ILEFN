@@ -24,10 +24,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-65nd4@+*y86f6&rh1iblt$w^)8dae0@f*n5+-x!c3s9^!ji-t&')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://ilefn-production.up.railway.app',
+    'https://*.up.railway.app',
+]
 
 # Application definition
 
@@ -144,6 +149,12 @@ MEDIA_URL = '/media/'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+import os
+if not os.path.exists(STATIC_ROOT):
+    os.makedirs(STATIC_ROOT, exist_ok=True)
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
