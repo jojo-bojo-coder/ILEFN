@@ -1,1 +1,1 @@
-web: python manage.py migrate && python manage.py collectstatic --noinput && gunicorn ILEFN.wsgi --bind 0.0.0.0:$PORT --log-file -
+web: python manage.py migrate && python manage.py loaddata main/fixtures/initial_data.json --ignorenonexistent && python manage.py collectstatic --noinput && gunicorn ILEFN.wsgi --bind 0.0.0.0:$PORT --log-file -
