@@ -96,13 +96,13 @@
         box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
         transition: all 0.3s ease;
         aspect-ratio: 3/2;
-        /* Animation properties - scale from center */
+        /* Initial state for animation */
         opacity: 0;
-        transform: scale(0.3);
+        transform: scale(0.8);
         transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease;
     }
 
-    .gallery-item.animate-in {
+    .gallery-item.loaded {
         opacity: 1;
         transform: scale(1);
     }
@@ -595,6 +595,26 @@
 
 {% block extra_js %}
 <script>
+    // Page load animation - gallery items fade in and scale up when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const galleryItems = document.querySelectorAll('.gallery-item');
+
+        // Function to trigger the animation
+        function animateGalleryItems() {
+            galleryItems.forEach((item, index) => {
+                // Add staggered delay based on element position in the grid
+                const delay = index * 100; // 100ms delay between each item
+
+                setTimeout(() => {
+                    item.classList.add('loaded');
+                }, delay);
+            });
+        }
+
+        // Start animation after a small delay to ensure page is ready
+        setTimeout(animateGalleryItems, 300);
+    });
+
     // Scroll-triggered animation - gallery items scale up from center when scrolled into view
     document.addEventListener('DOMContentLoaded', function() {
         const galleryItems = document.querySelectorAll('.gallery-item');
@@ -608,7 +628,7 @@
                     const delay = index * 100; // 100ms delay between each item
 
                     setTimeout(() => {
-                        entry.target.classList.add('animate-in');
+                        entry.target.classList.add('loaded');
                     }, delay);
 
                     // Stop observing after animation is triggered
