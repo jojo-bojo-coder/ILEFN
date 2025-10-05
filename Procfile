@@ -1,1 +1,1 @@
-web: gunicorn ILEFN.wsgi --log-file -
+web: python manage.py migrate && python manage.py collectstatic --noinput && gunicorn ILEFN.wsgi --bind 0.0.0.0:$PORT --log-file -
