@@ -99,10 +99,6 @@ import os
 from django.conf import settings
 from datetime import datetime
 
-def reverse_arabic_text(text):
-    """Simple reversal for Arabic text (quick fix)"""
-    return text[::-1]
-
     
 def generate_certificate(registration, result):
     """
@@ -152,14 +148,14 @@ def generate_certificate(registration, result):
     draw.text((name_x, 310), name_text, fill=black, font=font_name)
 
     # Draw participation label
-    participation_text = reverse_arabic_text("على المشاركة في اختبار السمات الريادية")
+    participation_text = "على المشاركة في اختبار السمات الريادية"
     label_bbox = draw.textbbox((0, 0), participation_text, font=font_label)
     label_width = label_bbox[2] - label_bbox[0]
     label_x = (width - label_width) // 2
     draw.text((label_x, 430), participation_text, fill=black, font=font_label)
 
     # Draw score label
-    score_label = reverse_arabic_text("والحصول على درجة")
+    score_label = "والحصول على درجة"
     label2_bbox = draw.textbbox((0, 0), score_label, font=font_label)
     label2_width = label2_bbox[2] - label2_bbox[0]
     label2_x = (width - label2_width) // 2
@@ -242,14 +238,14 @@ def generate_junior_certificate(registration, result):
     draw.text((name_x, 310), name_text, fill=black, font=font_name)
 
     # Draw participation label
-    participation_text = reverse_arabic_text("على المشاركة في اختبار السمات الريادية")
+    participation_text = "على المشاركة في اختبار السمات الريادية"
     label_bbox = draw.textbbox((0, 0), participation_text, font=font_label)
     label_width = label_bbox[2] - label_bbox[0]
     label_x = (width - label_width) // 2
     draw.text((label_x, 430), participation_text, fill=black, font=font_label)
 
     # Draw score label
-    score_label = reverse_arabic_text("والحصول على درجة")
+    score_label = "والحصول على درجة"
     label2_bbox = draw.textbbox((0, 0), score_label, font=font_label)
     label2_width = label2_bbox[2] - label2_bbox[0]
     label2_x = (width - label2_width) // 2
