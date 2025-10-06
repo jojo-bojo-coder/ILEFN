@@ -123,7 +123,7 @@ def generate_certificate(registration, result):
 
     # Load fonts with error handling
     try:
-        font_path = os.path.join(settings.BASE_DIR, 'static', 'fonts', 'alexandria.ttf')
+        font_path = os.path.join(settings.BASE_DIR, 'static', 'fonts', 'IBMPlexSansArabic-Regular.ttf')
         font_name = ImageFont.truetype(font_path, 70)
         font_label = ImageFont.truetype(font_path, 24)
         font_score = ImageFont.truetype(font_path, 40)
