@@ -100,11 +100,15 @@ from django.conf import settings
 from datetime import datetime
 from arabic_reshaper import reshape
 from bidi.algorithm import get_display
-    
+
+
 def generate_certificate(registration, result):
     """
-    Generate an adult certificate with proper text positioning
+    Generate an adult certificate with proper Arabic text handling
     """
+    from arabic_reshaper import reshape
+    from bidi.algorithm import get_display
+
     template_path = os.path.join(settings.BASE_DIR, 'static', 'images', 'Frame 2 Gold.png')
 
     if not os.path.exists(template_path):
@@ -134,34 +138,35 @@ def generate_certificate(registration, result):
     white = (255, 255, 255, 255)
 
     # Cover existing content areas with white
-    # Name area
     draw.rectangle([(80, 310), (width - 80, 430)], fill=white)
-    # Score area
     draw.rectangle([(width // 2 - 220, 430), (width // 2 + 220, 520)], fill=white)
-    # Date area
     draw.rectangle([(100, 680), (370, 750)], fill=white)
 
-    # Draw participant name (centered)
-    name_text = registration.name
+    # Process Arabic text helper
+    def prepare_arabic_text(text):
+        reshaped_text = reshape(text)
+        return get_display(reshaped_text)
+
+    # Draw participant name
+    name_text = prepare_arabic_text(registration.name)
     name_bbox = draw.textbbox((0, 0), name_text, font=font_name)
     name_width = name_bbox[2] - name_bbox[0]
     name_x = (width - name_width) // 2
     draw.text((name_x, 310), name_text, fill=black, font=font_name)
 
-    # Process Arabic text with proper reshaping and bidi
-    def prepare_arabic_text(text):
-        reshaped_text = reshape(text)  # Reshape Arabic characters
-        return get_display(reshaped_text)  # Apply RTL direction
+    # Arabic text strings - stored correctly in source code
+    participation_label = "على المشاركة في اختبار السمات الريادية"
+    score_label_text = "والحصول على درجة"
 
     # Draw participation label
-    participation_text = prepare_arabic_text("على المشاركة في اختبار السمات الريادية")
+    participation_text = prepare_arabic_text(participation_label)
     label_bbox = draw.textbbox((0, 0), participation_text, font=font_label)
     label_width = label_bbox[2] - label_bbox[0]
     label_x = (width - label_width) // 2
     draw.text((label_x, 430), participation_text, fill=black, font=font_label)
 
     # Draw score label
-    score_label = prepare_arabic_text("والحصول على درجة")
+    score_label = prepare_arabic_text(score_label_text)
     label2_bbox = draw.textbbox((0, 0), score_label, font=font_label)
     label2_width = label2_bbox[2] - label2_bbox[0]
     label2_x = (width - label2_width) // 2
@@ -174,7 +179,7 @@ def generate_certificate(registration, result):
     score_x = (width - score_width) // 2
     draw.text((score_x, 490), score_text, fill=gold, font=font_score)
 
-    # Draw issue date (consistent format)
+    # Draw issue date
     date_text = result.created_at.strftime("%Y/%m/%d")
     draw.text((160, 695), date_text, fill=black, font=font_date)
 
@@ -182,7 +187,6 @@ def generate_certificate(registration, result):
     img = Image.alpha_composite(img, overlay)
     img = img.convert('RGB')
 
-    # Save with unique filename
     certificates_dir = os.path.join(settings.MEDIA_ROOT, 'certificates')
     os.makedirs(certificates_dir, exist_ok=True)
 
@@ -190,10 +194,8 @@ def generate_certificate(registration, result):
     filepath = os.path.join(certificates_dir, filename)
     img.save(filepath, 'PNG', quality=95)
 
-    # Return relative path from MEDIA_ROOT instead of absolute path
     relative_path = os.path.join('certificates', filename)
-    return relative_path  # Change this line
-
+    return relative_path
 
 
 def generate_junior_certificate(registration, result):
