@@ -98,7 +98,8 @@ from PIL import Image, ImageDraw, ImageFont
 import os
 from django.conf import settings
 from datetime import datetime
-
+from arabic_reshaper import reshape
+from bidi.algorithm import get_display
     
 def generate_certificate(registration, result):
     """
@@ -147,15 +148,20 @@ def generate_certificate(registration, result):
     name_x = (width - name_width) // 2
     draw.text((name_x, 310), name_text, fill=black, font=font_name)
 
+    # Process Arabic text with proper reshaping and bidi
+    def prepare_arabic_text(text):
+        reshaped_text = reshape(text)  # Reshape Arabic characters
+        return get_display(reshaped_text)  # Apply RTL direction
+
     # Draw participation label
-    participation_text = "على المشاركة في اختبار السمات الريادية"
+    participation_text = prepare_arabic_text("على المشاركة في اختبار السمات الريادية")
     label_bbox = draw.textbbox((0, 0), participation_text, font=font_label)
     label_width = label_bbox[2] - label_bbox[0]
     label_x = (width - label_width) // 2
     draw.text((label_x, 430), participation_text, fill=black, font=font_label)
 
     # Draw score label
-    score_label = "والحصول على درجة"
+    score_label = prepare_arabic_text("والحصول على درجة")
     label2_bbox = draw.textbbox((0, 0), score_label, font=font_label)
     label2_width = label2_bbox[2] - label2_bbox[0]
     label2_x = (width - label2_width) // 2
